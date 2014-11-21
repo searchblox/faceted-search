@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html >
+<html>
 <head>
-    <title>SearchBlox Faceted Search</title>
+    <script>document.write('<base href="' + document.location + '">');</script>
+    <title></title>
     <meta charset="utf-8"/>
     <script src="lib/jquery-2.1.0.min.js"></script>
 
     <script type="text/javascript" src="lib/angular.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="lib/angular-route.min.js" charset="UTF-8"></script>
     <script type="text/javascript" src="lib/angular-resource.min.js" charset="UTF-8"></script>
     <script type="text/javascript" src="lib/angular-sanitize.min.js" charset="UTF-8"></script>
 
     <script type="text/javascript" src="lib/moment.js" charset="UTF-8"></script>
     <script type="text/javascript" src="lib/json2extension.js" charset="UTF-8"></script>
-
+    
+    <script src="lib/jquery-ui/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/jquery-ui/themes/smoothness/jquery-ui.min.css">
+    
     <script src="lib/ui-bootstrap-tpls-0.10.0.js" charset="UTF-8"></script>
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="css/custom-style.css"/>
@@ -26,6 +31,7 @@
     <script src="js/factories/searchblox-factory.js" charset="UTF-8"></script>
     <script src="js/filters/searchblox-filter.js" charset="UTF-8"></script>
     <script src="js/modules/facet-module.js" charset="UTF-8"></script>
+    <script src="js/modules/rw-ui-slider.js" charset="UTF-8"></script>
     <script src="js/modules/searchblox-module.js" charset="UTF-8"></script>
     <script src="js/services/searchblox-service.js" charset="UTF-8"></script>
     <script src="js/custom-lib/myscripts.js" charset="UTF-8"></script>
@@ -38,20 +44,13 @@
     <div style="margin-top:10px;margin-bottom:10px" align="center">
         <a href="http://www.searchblox.com"><img src="images/logo-searchblox.png"/></a>
     </div>
-
-    <div ng-controller="searchbloxController" ng-init="init()">
-        <form class="center-block" >
-            <custominput id="xyz" ng-model="query" onsearch="startSearch" inputstyle="inputClass">
-                <autocomplete source="loadItems" ng-show="showAutoSuggest"></autocomplete>
-            </custominput>
-        </form>
-        <div ng-include src="'views/search-results.html'" >
-        </div>
-    </div>
+    
+    <div ng-view=""></div>
+    
     <div id="footer" style="margin-top: 10px;" align="center">
-    <span
-            class="app-font">Copyright 2014 SearchBlox Software, Inc.</span><span class="links">&nbsp;<a
-            href="http://www.searchblox.com" target="_blank">Contact Us</a></span></div>
+        <span class="app-font">Copyright {{ddate}} SearchBlox Software, Inc.</span>
+        <span class="links">&nbsp;<a href="http://www.searchblox.com" target="_blank">Contact Us</a></span>
+    </div>
 
 </div>
 

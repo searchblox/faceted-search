@@ -4,7 +4,7 @@
         {"field": "contenttype", "display": "Content Type","size":"10"},
         {"field": "keywords",  "display": "Keywords","size":"10"},
         {"field": "colname","display": "Collection","size":"10"},
-        {"field": "size","display":"Size",
+        {"field": "size","display":"Size", "slider": true,
             "range":[
             {"name":"&lt 100kB","from":"*","to":"102400"},
             {"name":"100kB to 500kB","from":"102400","to":"512000"},

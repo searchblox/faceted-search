@@ -25,15 +25,9 @@
 
     <div class="row" style="margin-top:20px;">
         <div class="col-sm-2 col-md-2 sidebar left-nav colorBg" ng-show="hasFacets()">
-
         	<span>
-        	<!--	<div class="" id="facetview_leftcol_percolator" style="float: left; ">
-                  <a class="btn btn-warning" href="#">Create Alert</a>
-                </div>-->
                 <br><br>
-                <div>
-        				{{parsedSearchResults.found}} results found
-        		</div>
+                <div ng-bind="parsedSearchResults.found + ' results found'"></div>
         	</span>
 
             <div class="col-lg-12" ng-repeat="item in selectedItems" slide-show="showInput">
@@ -44,8 +38,15 @@
             </div>
 
 			<span>
-            <div ng-repeat="facet in parsedSearchResults.facets">
-                <h5 style="font-weight: bold">{{facetMap[facet["name"]]["display"]}}</h5>
+            <div ng-repeat="facet in parsedSearchResults.facets" ng-if="parsedSearchResults.records.length">
+                <h5 style="font-weight: bold" ng-bind="facetMap[facet['name']]['display']"></h5>
+                <rw-slider
+                        range="true"
+                        ng-if="facetMap[facet['name']]['slider']"
+                        values="[0, 0]"
+                        search-name="facet['name']"
+                        search-data="facetMap[facet['name']]['range']"
+                ></rw-slider>
                 <ul>
                     <li ng-repeat="filter in facet[facet['name']][1]">
                         <a href data-ng-click="doSearchByFilter(filter, facet['name'])" ng-show="filter['@name']">
