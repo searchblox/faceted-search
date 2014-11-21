@@ -1,0 +1,9 @@
+<div ng-init="init()">
+    <form class="center-block" >
+        <custominput id="xyz" ng-model="query" onsearch="startSearch" inputstyle="inputClass">
+            <autocomplete source="loadItems" ng-show="showAutoSuggest"></autocomplete>
+        </custominput>
+    </form>
+    <div ng-include src="'views/search-results.html'" >
+    </div>
+</div>
