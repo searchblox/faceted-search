@@ -185,7 +185,7 @@ angular.module('searchblox.service', [])
 
         function getParam(paramName, urlString) {
             paramName = paramName.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-            var regexS = "[\\?&]" + paramName + "=([^&#]*)";
+            var regexS = "[\\?&](?:amp;)?" + paramName + "=([^&#]*)";
             var regex = new RegExp(regexS);
             var results = regex.exec(urlString);
             if (results == null) {
