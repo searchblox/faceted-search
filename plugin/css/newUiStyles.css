@@ -1,0 +1,144 @@
+body{
+  background-color: #F2F2F2;
+  font-family: sans-serif;
+}
+/* COMMON STYLES FOR MOST SECTIONS */
+.border-radius-0{
+  border-radius: 0 !important;
+}
+
+.background-blue{
+  background-color: #619ED5;
+}
+
+.progress-margin-bottom{
+  margin-bottom: 0;
+}
+
+.line-height-24{
+  line-height: 24px;
+}
+
+.font-color{
+  color: #5D5D5D;
+}
+
+.padding-10{
+  padding: 10px;
+}
+
+.padding-5{
+  padding: 5px;
+}
+/* HEADER SECTION */
+.header{
+  background-color: #5C5C5C;
+  padding: 1em 1em 1em 4em;
+}
+
+.header img{
+  height: 54px;
+}
+
+.iconsDiv{
+  display: flex;
+  height: 54px;
+  align-items: center;
+}
+
+.headerIcons{
+  color: white;
+  margin-left: 2em;
+}
+
+/* FACETED SEARCH TEXT */
+
+.faceted-search-text > h3{
+  font-weight: bold;
+}
+
+.settings-image{
+  background-color: white;
+  border-left: 0;
+  padding: 0 !important;
+}
+
+/* INPUT FIELD GROUP */
+.settings-image > span{
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, 0.3);
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.input-search{
+  border-right: 0 !important;
+  box-shadow: none !important;
+}
+
+.input-search:focus{
+  box-shadow: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  border-right: none !important;
+}
+
+/* LEFT PANE FILTERS */
+.results-found{
+  font-size: 12px !important;
+}
+
+.filter-selected{
+  display: inline-block;
+  vertical-align: middle;
+  color: #609ed4;
+  font-size: 12px;
+  line-height: 10px;
+  font-weight: 400;
+  background-color: #daeffa;
+  border: 1px solid #609ed4;
+  border-radius: 3px;
+  -webkit-transition: all .25s ease;
+  transition: all .25s ease;
+  text-decoration: none;
+  padding: 8px 10px 8px 10px;
+  margin: 5px;
+}
+
+.filter-options:hover{
+  cursor: pointer;
+  color: blue;
+}
+
+.filter-type{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.chevron-down-icon{
+  margin-right: 4em;
+  cursor: pointer;
+}
+
+/* SEARCH RESULTS */
+.search-results-for, .filter-by{
+  font-size: 18px;
+  background-color: #F2F2F2;
+  font-weight: bold;
+  padding: 15px 20px 15px 20px;
+  color: #5D5D5D;
+}
+
+.search-result-container{
+  padding: 12px;
+}
+
+/*TITLE OF SEARCH RESULT IN ANCHOR TAG*/
+.search-result-title{
+  color: #5D5D5D;
+  font-size: 16px;
+}
+
+.search-result-title:hover{
+  color: #5D5D5D;
+  text-decoration: none;
+}

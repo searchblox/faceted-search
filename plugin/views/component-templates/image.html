@@ -15,7 +15,7 @@
             {{content.description}}
         </div>
         <div ng-switch-default>
-             <span ng-repeat="text in formatData(content.context['#text']) track by $index">
+             <span ng-repeat="text in formatData(content.context['text']) track by $index">
                    ...{{text}} <b>{{formatData(content.context.highlight)[$index]}}</b>
              </span>
         </div>

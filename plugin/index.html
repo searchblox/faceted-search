@@ -2,6 +2,7 @@
 <html>
 <head>
     <script>document.write('<base href="' + document.location + '">');</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <meta charset="utf-8"/>
     <script src="lib/jquery-2.1.0.min.js"></script>
@@ -13,13 +14,15 @@
 
     <script type="text/javascript" src="lib/moment.js" charset="UTF-8"></script>
     <script type="text/javascript" src="lib/json2extension.js" charset="UTF-8"></script>
-    
+
     <script src="lib/jquery-ui/jquery-ui.min.js"></script>
     <link rel="stylesheet" type="text/css" href="lib/jquery-ui/themes/smoothness/jquery-ui.min.css">
-    
+
     <script src="lib/ui-bootstrap-tpls-0.10.0.js" charset="UTF-8"></script>
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="css/custom-style.css"/>
+    <link rel="stylesheet" href="css/newUiStyles.css"/>
+    <link rel="stylesheet" href="lib/font-awesome-4.7.0/css/font-awesome.min.css" type="text/css"/>
     <link rel="shortcut icon" href="http://searchblox-website.s3.amazonaws.com/favicon.ico" />
     <script src="bootstrap/js/bootstrap.min.js" charset="UTF-8"></script>
 
@@ -39,14 +42,25 @@
     <link rel="stylesheet" href="css/autosuggest-style.css"/>
 
 </head>
-<body style="background:url('images/subtle_dots.png')">
-<div ng-app="searchbloxModule" class="container">
-    <div style="margin-top:10px;margin-bottom:10px" align="center">
-        <a href="http://www.searchblox.com"><img src="images/logo-searchblox.png"/></a>
+<body>
+<div ng-app="searchbloxModule" class="col-sm-12">
+  <div class="row">
+    <div class="col-sm-12 header container-fluid">
+      <div class="col-sm-3 pull-left"><img ng-src="images/logo.png"/></div>
+      <div class="col-sm-1 pull-right iconsDiv">
+        <a href="https://www.searchblox.com" target="_blank" >
+          <i class="fa fa-exclamation-circle fa-rotate-180 fa-lg headerIcons" aria-hidden="true"></i>
+        </a>
+      </div>
     </div>
-    
+  </div>
+
+  <div class="row faceted-search-text">
+    <h3 class="col-md-offset-1">Faceted Search</h3>
+  </div>
+
     <div ng-view=""></div>
-    
+
     <div id="footer" style="margin-top: 10px;" align="center">
         <span class="app-font">Copyright {{ddate}} SearchBlox Software, Inc.</span>
         <span class="links">&nbsp;<a href="http://www.searchblox.com" target="_blank">Contact Us</a></span>

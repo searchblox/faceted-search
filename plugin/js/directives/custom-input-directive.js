@@ -35,7 +35,29 @@ angular.module('searchblox.custominput',[])
         scope: { searchParam: '=ngModel', onsearch: '=', inputstyle:"=inputstyle"},
         replace: false,
         transclude: true,
-        template: '<div class="{{inputstyle.name}}">' +
+        template: '<div class="{{inputstyle.name}}"> <br>' +
+            '         <div class="input-group input-group-lg">' +
+            '            <input type="text" class="form-control border-radius-0 input-search" placeholder="Search Term" ng-model="searchParam" ng-change="newTagChange()" autofocus/>' +
+            '             <div class="input-group-addon settings-image"> <span>' +
+            '               <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <img ng-src="images/settings.png"/> </a>' +
+            '               <ul class="dropdown-menu">' +
+            '                 <li><a href data-ng-click="partialMatch()" >partial match</a></li>' +
+            '                 <li><a href data-ng-click="exactMatch()">exact match</a></li>' +
+            '                 <li><a href data-ng-click="fuzzyMatch()">fuzzy match</a></li>' +
+            '                 <li><a href data-ng-click="matchAll()">match all</a></li>' +
+            '                 <li style="border:1px solid rgba(0, 0, 0, 0.2)"></li>' +
+            '                 <li><a href data-ng-click="partialMatch()" >Autosuggest</a></li>' +
+            '                 <li style="border:1px solid rgba(0, 0, 0, 0.2)"></li>' +
+            '                 <li><a href data-ng-click="exactMatch()">Learn more</a></li>' +
+            '                 <li style="border:1px solid rgba(0, 0, 0, 0.2)"></li>' +
+            '                 <li><a href data-ng-click="fuzzyMatch()">Results per page(10 hc)</a></li>' +
+            '                 <li><a href data-ng-click="matchAll()">Suggestions per page(10 hc)</a></li>' +
+            '               </ul>' +
+            '              </span> </div>' +
+            '            <div class="input-group-btn"> '+
+            '               <button type="button" class="btn btn-primary border-radius-0"><i class="fa fa-search"></i></button>' +
+            '            </div>' +
+            '         </div>' +/*
             ' <div class="input-group input-group-sm">' +
             '    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>' +
             '    <input class="form-control" type="text"' +
@@ -53,7 +75,7 @@ angular.module('searchblox.custominput',[])
             '        <li><a href data-ng-click="matchAll()">match all</a></li>' +
             '    </ul>' +
             '</span>' +
-            ' </div>' +
+            ' </div>' + */
             '<div ng-transclude></div>' +
             '</div>',
         controller: ["$scope", "$attrs", "$element", function ($scope, $attrs, $element) {

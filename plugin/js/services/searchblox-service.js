@@ -28,14 +28,14 @@ angular.module('searchblox.service', [])
                 if (facets[i].size !== undefined && facets[i].size !== null) {
                     fields = fields + '&f.' + facets[i].field + '.size=' + facets[i].size;
                 }
-                
+
                 values[facets[i].field] = {};
                 values[facets[i].field]["display"] = facets[i].display;
-                
+
                 if (facets[i].slider) {
                     values[facets[i].field]["slider"] = facets[i].slider;
                 }
-                
+
                 if (facets[i].range !== undefined && facets[i].range !== null) {
                     for (var r in facets[i].range) {
                         urlParam = urlParam + '&f.' + facets[i].field + '.range=[' + facets[i].range[r]["from"] + 'TO' + facets[i].range[r]["to"] + ']';
@@ -197,6 +197,7 @@ angular.module('searchblox.service', [])
         }
 
         this.parseLinks = function (dataobj, facetFieldsMap) {
+          console.log(dataobj);
             var resultobj = new Object();
             // resultobj["npages"] = new Array();
             resultobj["pages"] = new Array();
@@ -212,7 +213,7 @@ angular.module('searchblox.service', [])
                         var linkobj = new Object();
                         linkobj['pageName'] = dataobj.links.link[item]["@page"];
                         linkobj['pageNo'] = getParam('page', dataobj.links.link[item]["@url"]);
-                        linkobj['url'] = dataobj.links.link[item]["@url"]
+                        linkobj['url'] = dataobj.links.link[item]["@url"];
                         resultobj["pages"].push(linkobj);
                         //resultobj["pages"].push(dataobj.links.link[item]);
                     }
@@ -345,6 +346,10 @@ angular.module('searchblox.service', [])
             resultobj["start"] = "";
             resultobj["found"] = "0";
             resultobj["showAds"] = false;
+            resultobj["query"] = "";
+            if(typeof(dataobj.results['@query']) !== "undefined"){ //TO STORE THE QUERY IN RESULT OBJECT
+              resultobj["query"] = dataobj.results['@query'];
+            }
             if (typeof(dataobj.results) !== "undefined" && typeof(dataobj.results.result) !== "undefined") {
                 for (var item in dataobj.results.result) {
                     if (item == "@no") {

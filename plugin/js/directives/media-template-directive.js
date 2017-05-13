@@ -49,7 +49,7 @@ angular.module('searchblox.contentItem', []).
             controller: function ($scope) {
 
                 $scope.getLastModified = function (lastmodified) {
-                    return moment(lastmodified).format("MMMM Do YYYY, h:mm:ss a");
+                    return moment(lastmodified).format("MMM DD, YYYY");
                 }
 
                 $scope.formatData = function (obj) {
@@ -61,4 +61,3 @@ angular.module('searchblox.contentItem', []).
             }
         };
     }]);
-

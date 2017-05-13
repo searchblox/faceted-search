@@ -2,14 +2,17 @@
  * Created by cselvaraj on 4/29/14.
  */
 'use strict';
+//var rootUrl = "http://185.73.37.206:8080";
+//var rootUrl = "http://92.222.88.95:8080";
+var rootUrl = "http://localhost:8080";
 // CONTROLLER
 angular.module('searchblox.controller', [])
     .controller('searchbloxController', ['$rootScope', '$scope', '$http', '$location', 'searchbloxService', 'searchbloxFactory', 'facetFactory', '$q', '$timeout', '$sce',
         function ($rootScope, $scope, $http, $location, searchbloxService, searchbloxFactory, facetFactory, $q, $timeout, $sce) {// 'autoCompleteFactory',
 
-            var searchUrl = '/searchblox/servlet/SearchServlet';
-            var autoSuggestUrl = '/searchblox/servlet/AutoSuggest';
-            var reportServletUrl = '/searchblox/servlet/ReportServlet';
+            var searchUrl = rootUrl+'/searchblox/servlet/SearchServlet';
+            var autoSuggestUrl = rootUrl+'/searchblox/servlet/AutoSuggest';
+            var reportServletUrl = rootUrl+'/searchblox/servlet/ReportServlet';
 
             // Hard coded these values. This needs to be dynamic
             //var facet = 'on';
@@ -24,6 +27,7 @@ angular.module('searchblox.controller', [])
             // $scope.sortVal = "";
             $scope.from = 0;
             $scope.page = 1;
+            $scope.currentPage = 1; //I: To track current page
             $scope.prevPage = 1;
             //$scope.pageSize = 10;
             $scope.noOfSuggests = 5;
@@ -37,7 +41,7 @@ angular.module('searchblox.controller', [])
             $scope.maxAdsLimit = 2;
             $scope.dataMap = new Object();
             $scope.inputClass = {};
-            $scope.inputClass.name = "ngCustomInput col-sm-8 col-md-8 col-md-offset-2";
+            $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
 
             // load autosuggest items
             $scope.loadItems = function (term) {
@@ -122,7 +126,7 @@ angular.module('searchblox.controller', [])
             }
             // Search function
             $scope.doSearch = function () {
-
+                $scope.currentPage = $scope.page;
                 var urlParams = searchbloxService.getUrlParams(searchUrl, $scope.query,
                     $scope.rangeFilter, $scope.filterFields, $scope.page, $scope.dataMap);
                 searchbloxFactory.getResponseData(urlParams).then(function (searchResults) {
@@ -131,7 +135,7 @@ angular.module('searchblox.controller', [])
                     // $scope.getTopClicked();
                     //$scope.getTagCloud();
                     $scope.startedSearch = true;
-                    $scope.inputClass.name = "ngCustomInput col-sm-6 col-md-6 col-md-offset-2";
+                    $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
                 });
             }
 
