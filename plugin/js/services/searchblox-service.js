@@ -197,7 +197,6 @@ angular.module('searchblox.service', [])
         }
 
         this.parseLinks = function (dataobj, facetFieldsMap) {
-          console.log(dataobj);
             var resultobj = new Object();
             // resultobj["npages"] = new Array();
             resultobj["pages"] = new Array();

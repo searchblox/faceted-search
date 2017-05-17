@@ -136,6 +136,7 @@ angular.module('searchblox.controller', [])
                     //$scope.getTagCloud();
                     $scope.startedSearch = true;
                     $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
+                    $scope.displayPageNo();
                 });
             }
 
@@ -326,11 +327,36 @@ angular.module('searchblox.controller', [])
                 $scope.doSearch();
             }
 
-            // Function for fetch page results.
+            // Function for fetch page results. on clicking pagination button
             $scope.fetchPage = function (pageNo) {
                 $scope.page = pageNo;
                 $scope.prevPage = pageNo;
                 $scope.doSearch();
+            }
+
+            $scope.displayPageNo = function(){
+              var noOfPages = Math.ceil($scope.parsedSearchResults.found / $scope.dataMap['pageSize']);
+              $scope.displayPageNoObj = {
+                              	pageNoDisplay : 1,
+                              	prev : 1,
+                              	next : 6,
+                                noOfPages : noOfPages
+                              }
+              var pageSet = Math.ceil(($scope.currentPage)/5);
+              $scope.displayPageNoObj.pageNoDisplay = ((pageSet - 1)*5 + 1);
+              if(pageSet == 1){
+                $scope.displayPageNoObj.prev = 1;
+              }
+              else{
+                $scope.displayPageNoObj.prev = ((pageSet - 2)*5 + 1);
+              }
+              if(pageSet == Math.ceil(noOfPages / 5)){
+                $scope.displayPageNoObj.next = noOfPages;
+              }
+              else{
+                $scope.displayPageNoObj.next = (pageSet*5 + 1);
+              }
+
             }
 
             // check if there is atleast one filter in the facet

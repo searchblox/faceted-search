@@ -4,8 +4,8 @@
 
 angular.module('searchblox.contentItem', []).
     directive('contentItem', ['$compile', '$http', '$templateCache','$sce', function($compile, $http, $templateCache, $sce) {
-
         var getTemplate = function(contentType) {
+        console.log("a");
             var templateLoader,
                 baseUrl = 'views/component-templates/',
                 templateMap = {
@@ -13,7 +13,6 @@ angular.module('searchblox.contentItem', []).
                     video: 'video.html',
                     href: 'href.html'
                 };
-
             var templateUrl = baseUrl + templateMap[contentType];
             templateLoader = $http.get(templateUrl, {cache: $templateCache});
 
@@ -30,7 +29,6 @@ angular.module('searchblox.contentItem', []).
                     scope.url = scope.content.contentUrl;
                 }
             });
-
             var loader = getTemplate(scope.content.contentNature);
 
             var promise = loader.success(function(html) {
@@ -51,7 +49,6 @@ angular.module('searchblox.contentItem', []).
                 $scope.getLastModified = function (lastmodified) {
                     return moment(lastmodified).format("MMM DD, YYYY");
                 }
-
                 $scope.formatData = function (obj) {
                     if (!angular.isArray(obj))
                         return [obj];

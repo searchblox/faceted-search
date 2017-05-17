@@ -103,18 +103,23 @@
 	            </div>
 	        </div>
 					<!-- PAGINATION -->
-          <div class="row-fluid main-section col-sm-8 pull-right">
+          <div class="row-fluid main-section col-sm-8 pull-right" ng-show="displayPageNoObj.noOfPages">
             <ul class="pagination">
-                <li ng-class="{active:lnk['pageNo'] == page}" ng-repeat="lnk in parsedLinks.pages track by lnk['pageName']">
-                    <a href data-ng-click="fetchPage(lnk['pageNo'])" ng-show="lnk['pageName']">
-											<span ng-if='lnk["pageName"] == "prev"'><<</span>
-											<span ng-if='lnk["pageName"] == "next"'>>></span>
-											<span ng-if='lnk["pageName"] != "prev" && lnk["pageName"] != "next"'>{{lnk["pageName"]}}</span>
+                <li>
+                    <a href data-ng-click="fetchPage(displayPageNoObj.prev)">
+                      <span>«</span>
+                    </a>
+                </li>
+                <li ng-class="{active:displayPageNoObj.pageNoDisplay + lnk == page}" ng-repeat="lnk in [0,1,2,3,4]">
+                    <a href data-ng-click="fetchPage(displayPageNoObj.pageNoDisplay + lnk)" ng-if="displayPageNoObj.pageNoDisplay + lnk <= displayPageNoObj.noOfPages">
+											<span>{{displayPageNoObj.pageNoDisplay + lnk}}</span>
 										</a>
                 </li>
-            </ul>
-						<ul class="pagination">
-                
+                <li>
+                    <a href data-ng-click="fetchPage(displayPageNoObj.next)">
+											<span>»</span>
+										</a>
+                </li>
             </ul>
           </div>
 					<!-- ADVERTISEMENT SECTION -->
@@ -126,21 +131,31 @@
             </div> -->
 						<!-- RESULTS SECTION -->
             <div class="row-fluid main-section">
-                    <div class="col-fluid" ng-repeat="result  in parsedSearchResults.records track by result['@no']" >
+                  <div class="col-fluid" ng-repeat="result  in parsedSearchResults.records track by result['@no']" >
                          <content-item  content="result">
                           </content-item>
                    </div>
             </div>
 					<!-- PAGINATION -->
-           <div class="row-fluid main-section">
-                <ul class="pagination">
-                    <li ng-class="{active:lnk['pageNo'] == page}"
-                        ng-repeat="lnk in parsedLinks.pages track by lnk['pageName']">
-                        <a href data-ng-click="fetchPage(lnk['pageNo'])"
-                           ng-show="lnk['pageName']">{{lnk["pageName"]}}</a>
-                    </li>
-                </ul>
-            </div>
+          <div class="row-fluid main-section col-sm-8 pull-right" ng-show="displayPageNoObj.noOfPages">
+            <ul class="pagination">
+                <li>
+                    <a href data-ng-click="fetchPage(displayPageNoObj.prev)">
+                      <span>«</span>
+                    </a>
+                </li>
+                <li ng-class="{active:displayPageNoObj.pageNoDisplay + lnk == page}" ng-repeat="lnk in [0,1,2,3,4]">
+                    <a href data-ng-click="fetchPage(displayPageNoObj.pageNoDisplay + lnk)" ng-if="displayPageNoObj.pageNoDisplay + lnk <= displayPageNoObj.noOfPages">
+                     <span>{{displayPageNoObj.pageNoDisplay + lnk}}</span>
+                   </a>
+                </li>
+                <li>
+                    <a href data-ng-click="fetchPage(displayPageNoObj.next)">
+                     <span>»</span>
+                   </a>
+                </li>
+            </ul>
+          </div>
 
             <div class="container" ng-show="usersCount == 0">
                 <h3>No Users Found</h3>
