@@ -22,15 +22,18 @@ angular.module('searchblox.service', [])
             var fields = "";
             var values = new Object();
             var urlParam = "";
+
             for (var i in facets) {
 
                 fields = fields + '&facet.field=' + facets[i].field;
-                if (facets[i].size !== undefined && facets[i].size !== null) {
-                    fields = fields + '&f.' + facets[i].field + '.size=' + facets[i].size;
-                }
 
                 values[facets[i].field] = {};
                 values[facets[i].field]["display"] = facets[i].display;
+                
+                if (facets[i].size !== undefined && facets[i].size !== null) {
+                    fields = fields + '&f.' + facets[i].field + '.size=' + facets[i].size;
+                    values[facets[i].field]["size"] = facets[i].size;
+                }
 
                 if (facets[i].slider) {
                     values[facets[i].field]["slider"] = facets[i].slider;

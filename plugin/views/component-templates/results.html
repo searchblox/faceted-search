@@ -4,7 +4,28 @@
       <div class="row-fluid line-height-24">
           <a href="{{url}}" target="_blank" class="search-result-title"><b>{{content.title}}</b></a>
       </div>
-      
+
+      <!-- TO DISPLAY VIDEOS FOR VIDEO RESULTS -->
+      <div class="row-fluid" ng-if="content.contentNature == 'video'">
+          <video thumbid="_video" width="320" height="240" poster="images/play.jpg" controls>
+            <source src="{{url}}" type="video/mp4"></source>
+          </video>
+      </div>
+
+      <!-- TO DISPLAY IMAGES FOR IMAGE RESULTS -->
+      <div class="row-fluid" ng-if="content.contentNature == 'image'">
+          <a href="{{url}}" target="_blank">
+              <img class="thumbnail" style="width:150px; max-height:150px;" ng-src="{{url}}">
+          </a>
+      </div>
+
+      <!-- TO DISPLAY IMAGES FOR TWITTER RESULTS -->
+      <div class="row-fluid" ng-if="content.contenttype == 'tweet'">
+          <a href="{{content._autocomplete}}" target="_blank">
+              <img class="thumbnail" style="width:100px; max-height:150px;" ng-src="{{content._autocomplete}}">
+          </a>
+      </div>
+
       <div class="row-fluid">
           <div ng-switch on="content.context" class="line-height-24">
               <div ng-switch-when="undefined" ng-show="content.description">
@@ -20,7 +41,7 @@
       </div>
 
       <div class="row-fluid line-height-24">
-          <a href="javascript:void(0)">{{content.url}}</a>
+          <spanc class="url-bottom">{{content.url}}</span>
       </div>
     </div>
   </div>
@@ -35,7 +56,7 @@
       </div>
       <div class="pull-right">
         <span class="pull-right">{{getLastModified(content.lastmodified)}}</span><br>
-        <span class="pull-right">{{content.size}}</span>
+        <span class="pull-right">{{sizeFormat(content.size)}}</span>
       </div>
 
 

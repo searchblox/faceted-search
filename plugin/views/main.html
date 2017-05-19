@@ -1,6 +1,6 @@
 <div ng-init="init()">
     <form class="center-block" >
-        <custominput id="xyz" ng-model="query" onsearch="startSearch" inputstyle="inputClass">
+        <custominput id="xyz" ng-model="query" onsearch="startSearch" inputstyle="inputClass" howmany="howmany()" howmanynofsuggest="howmanynofsuggest()" show-auto-suggest="showAutoSuggest">
             <autocomplete source="loadItems" ng-show="showAutoSuggest"></autocomplete>
         </custominput>
     </form>

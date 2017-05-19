@@ -49,6 +49,8 @@
     line-height: 18px;
     color: #333333;
     background-color: #ffffff;
+    box-shadow: 0px 0px 2px grey;
+    min-height: 500px;
 }
 
 /*screen-xs*/

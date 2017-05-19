@@ -91,12 +91,12 @@
 }
 .ngCustomInput .autocomplete {
     position: absolute;
-    padding: 0px 0px 0px 40px;
+    padding: 0px 0px 0px 0px;
     background-color: #fff;
     -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
     box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    width: 82%;
+    width: 100%;
     opacity:1.0;
 
 }

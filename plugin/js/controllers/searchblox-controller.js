@@ -43,6 +43,9 @@ angular.module('searchblox.controller', [])
             $scope.inputClass = {};
             $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
 
+            $scope.removeAds = false; //TO HIDE ADS IF TRUE
+            $scope.showUptoColFilterCountFlag = false; //COUNT TO SHOW THE NUMBER OF COLLECTION FILTERS
+
             // load autosuggest items
             $scope.loadItems = function (term) {
                 var autoSuggestData = $q.defer();
@@ -113,10 +116,11 @@ angular.module('searchblox.controller', [])
 
                         $scope.dataMap['facet'] = 'on';
                         $scope.dataMap['xsl'] = "json";
-
                     }
                 });
             }
+
+
 
             $scope.startSearch = function(){
                 $scope.from = 0;
@@ -191,24 +195,34 @@ angular.module('searchblox.controller', [])
 
             // adjust how many results are shown
             $scope.howmany = function () {
-                var newhowmany = prompt('Currently displaying ' + $scope.pageSize + ' results per page. How many would you like instead?');
-                if (newhowmany) {
-                    $scope.pageSize = parseInt(newhowmany);
+                var newhowmany = prompt('Currently displaying ' + $scope.dataMap['pageSize'] + ' results per page. How many would you like instead?');
+                if (newhowmany > 0) {
+                    $scope.dataMap['pageSize'] = parseInt(newhowmany);
                     $scope.from = 0;
-                    $scope.dosearch();
+                    $scope.doSearch();
                 }
             }
 
             // adjust how many suggestions are shown
-            var howmanynofsuggest = function () {
+            $scope.howmanynofsuggest = function () {
                 var newhowmany = prompt('Currently displaying ' + $scope.noOfSuggests + ' suggestions per page. How many would you like instead?');
-                if (newhowmany) {
+                if (newhowmany > 0) {
                     $scope.noOfSuggests = parseInt(newhowmany);
                     $scope.from = 0;
-                    $scope.dosearch();
+                    $scope.doSearch();
                 }
             };
 
+            //TO CHANGE THE NUMBER OF VALUES TO BE DISPLAYED FOR COLLECTION FILTERS
+            $scope.colFilterCountChange = function(coltype){
+              var oldhowmany = $scope.facetMap[coltype].size;
+              var newhowmany = prompt('Currently displaying ' + $scope.facetMap[coltype].size + '. How many would you like instead?');
+              if (newhowmany > 0) {
+                $scope.facetMap[coltype].size = parseInt(newhowmany);
+                $scope.dataMap['facetFields'] = $scope.dataMap['facetFields'].replace("f."+coltype+".size="+oldhowmany, "f."+coltype+".size="+newhowmany);
+                $scope.doSearch();
+              }
+            }
             // Function for search by filter.
             $scope.doSearchByFilter = function (filter, facetName, rSlider) {
                 $scope.page = 1;
@@ -325,6 +339,13 @@ angular.module('searchblox.controller', [])
                 }
                 $scope.filterFields = filters;
                 $scope.doSearch();
+            }
+
+            /* CLEAR ALL FILTERS APPLIED */
+            $scope.clearAllFilters = function(){
+              $scope.selectedItems = [];
+              $scope.filterFields = undefined;
+              $scope.doSearch();
             }
 
             // Function for fetch page results. on clicking pagination button

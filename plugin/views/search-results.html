@@ -1,70 +1,52 @@
 <div class="container-fluid app-font">
-	<!-- <div class="row">
-        <div id="sort_btn_aligner" ng-show="parsedSearchResults.found > 0" style="margin-top:40px;margin-bottom:50px;">
-            <div class="btn-group btn-group-{{type}} col-sm-6 col-md-6 col-md-offset-2" data-toggle="buttons">
-                <label class="btn btn-warning disabled btn-sm">Sort By :</label>
-                <label  ng-repeat="sortBtn in sortBtns" class="btn btn-primary btn-sm" data-ng-click="doSort(sortBtn['sortVal'])">
-                    {{sortBtn['display']}}
-                    <input type="radio"></label>
-                </label>
-                <label ng-switch on="dataMap['sortDir']" class="btn btn-info btn-sm">
-                    <div ng-switch-when="asc">
-                        <div id="direction" dir="asc" data-ng-click="doDirector('desc')">
-                            <span class="glyphicon glyphicon-arrow-up"></span>
-                        </div>
-                    </div>
-                    <div ng-switch-default>
-                        <div id="direction" dir="desc" data-ng-click="doDirector('asc')">
-                            <span class="glyphicon glyphicon-arrow-down"></span>
-                        </div>
-                    </div>
-                </label>
-            </div>
-        </div>
-    </div> -->
-
     <div class="row">
-        <div class="col-sm-12 col-md-3" ng-show="hasFacets()">
+      <!-- FILTERS ON LEFT PANE -->
+        <div class="col-sm-12 col-md-3 margin-top-1"  ng-if="parsedSearchResults.query">
 						<!-- FILTER BY    RESULTS FOUND HEADER -->
             <div class="colorBg col-sm-12 filter-by">
 							<span>Filter By</span>
 							<span class="pull-right results-found">{{parsedSearchResults.found}} Results Found</span>
 						</div>
 
+            <div class="col-sm-12 padding-10">
+              <div class="col-sm-6">
+                <a href data-ng-click="clearAllFilters()"> Clear Filter</a>
+              </div>
+              <div class="col-sm-6">
+                <a href> Create Alert </a>
+              </div>
+            </div>
+
 						<div class="col-sm-12">
 							<div class="row">
 		            <div ng-repeat="item in selectedItems" slide-show="showInput">
-		                <a id="item['id']" href="javascript:void(0)" data-ng-click="removeItem($index)" class="btn btn-info filter-selected pull-left">
-		                    <span ng-bind-html="item['filterName'] | trust"></span>
+		                <a id="item['id']" href="javascript:void(0)" data-ng-click="removeItem($index)" class="btn btn-info pull-left filter-selected">
+		                    <!-- <span ng-bind-html="item['filterName'] | trust"></span> -->{{item['filterName'] | trust}}
 		                    <i class="glyphicon glyphicon-remove"></i>
 		                </a>
 		            </div>
 							</div>
 						</div>
 
-						<span>
-	            <div ng-repeat="facet in parsedSearchResults.facets" ng-if="parsedSearchResults.records.length" ng-hide="facetMap[facet['name']]['display'] == 'Size'">
+	            <div ng-repeat="facet in parsedSearchResults.facets" ng-if="facetMap[facet['name']]['display']" ng-hide="facetMap[facet['name']]['display'] == 'Size'">    <!-- OLD VALUE - ng-if="parsedSearchResults.records.length" -->
 								<div class="col-sm-12">
 									<div class="col-sm-12 padding-10">
 										<div class="row">
 			                <span style="font-weight: bold" class="font-color filter-type" ng-bind="facetMap[facet['name']]['display']"></span>
-											<span class="glyphicon glyphicon-chevron-down pull-right font-color chevron-down-icon"></span>
+											<span class="glyphicon glyphicon-chevron-down pull-right font-color chevron-down-icon" ng-click="showUptoColFilterCountFlag = !showUptoColFilterCountFlag" ng-hide="facet['name'] == 'lastmodified'"></span>
 										</div>
+                    <div class="col-sm-10 showUptoColFilterCount padding-10" ng-click="colFilterCountChange(facet['name']);showUptoColFilterCountFlag = !showUptoColFilterCountFlag;" ng-show="showUptoColFilterCountFlag">
+                      <div>show upto {{facetMap[facet['name']].size}}</div>
+                    </div>
 									</div>
-	                <!-- <rw-slider
-	                        range="true"
-	                        ng-if="facetMap[facet['name']]['slider']"
-	                        values="[0, 0]"
-	                        search-name="facet['name']"
-	                        search-data="facetMap[facet['name']]['range']"
-	                ></rw-slider> -->
+
 									<div class="col-sm-12">
 										<div class="row">
 			                <ul>
 			                    <li ng-repeat="filter in facet[facet['name']][1]" class="padding-5">
 			                        <span data-ng-click="doSearchByFilter(filter, facet['name'])" ng-show="filter['@name']" class="font-color filter-options">
 			                            <span ng-bind-html="filter['@name'] | trust" forcloudrel="{{filter['#text']}}"
-			                                  forcloudtag="{{filter['@name']}}" class="facetText"></span>
+			                                  forcloudtag="{{filter['@name']}}" class="facetText word-break-filter"></span>
 			                            ({{filter["#text"]}})
 			                        </span>
 			                    </li>
@@ -73,7 +55,6 @@
 									</div>
 								</div>
 	            </div>
-            </span>
 
             <div>
                 <span ng-show="parsedSearchResults.found > 0"><div ng-bind-html="tagHtml"></div></span>
@@ -86,82 +67,85 @@
         </div>
 
 				<!-- RIGHT SIDE PANE - SEARCH RESULTS -->
-        <div class="col-sm-12 col-md-9 main">
+        <div class="col-sm-12 col-md-9 main margin-top-1">
 					<!-- SEARCH RESULTS FOR * -->
 					<div class="row-fluid search-results-for" ng-if="parsedSearchResults.query">
 						<span>Search Results for {{parsedSearchResults.query}}</span>
 					</div>
-					<!-- SORTING -->
-					<div id="sort_btn_aligner" ng-show="parsedSearchResults.found > 0" class="col-sm-4">
-	            <div class="btn-group btn-group-{{type}}" data-toggle="buttons">
-	                <a  href="" ng-repeat="sortBtn in sortBtns"  data-ng-click="doSort(sortBtn['sortVal']);doDirector('asc')">
-	                    <span ng-if="sortBtn['sortVal'] == 'relevance'"></span>
-											<span ng-if="sortBtn['sortVal'] == 'alpha'">Sort Alphbetically</span>
-											<span ng-if="sortBtn['sortVal'] == 'date'">Sort by Date</span>
-									</a>
-	                </label>
-	            </div>
-	        </div>
-					<!-- PAGINATION -->
-          <div class="row-fluid main-section col-sm-8 pull-right" ng-show="displayPageNoObj.noOfPages">
-            <ul class="pagination">
-                <li>
-                    <a href data-ng-click="fetchPage(displayPageNoObj.prev)">
-                      <span>«</span>
-                    </a>
-                </li>
-                <li ng-class="{active:displayPageNoObj.pageNoDisplay + lnk == page}" ng-repeat="lnk in [0,1,2,3,4]">
-                    <a href data-ng-click="fetchPage(displayPageNoObj.pageNoDisplay + lnk)" ng-if="displayPageNoObj.pageNoDisplay + lnk <= displayPageNoObj.noOfPages">
-											<span>{{displayPageNoObj.pageNoDisplay + lnk}}</span>
-										</a>
-                </li>
-                <li>
-                    <a href data-ng-click="fetchPage(displayPageNoObj.next)">
-											<span>»</span>
-										</a>
-                </li>
-            </ul>
+          <div class="col-sm-12">
+            <div class="row">
+    					<!-- SORTING -->
+    					<div id="sort_btn_aligner" ng-show="parsedSearchResults.found > 0" class="col-sm-4 pull-left sort-align">
+                  <a  href="" ng-repeat="sortBtn in sortBtns"  data-ng-click="doSort(sortBtn['sortVal'])">
+                      <span ng-if="sortBtn['sortVal'] == 'relevance'"></span>
+                      <span ng-if="sortBtn['sortVal'] == 'alpha'">Sort Alphbetically</span>
+                      <span ng-if="sortBtn['sortVal'] == 'date'">Sort by Date</span>
+                  </a>
+    	        </div>
+    					<!-- PAGINATION -->
+              <div class="row-fluid main-section col-sm-8 pull-right" ng-show="displayPageNoObj.noOfPages">
+                <ul class="pagination pull-right">
+                    <li>
+                        <a href data-ng-click="fetchPage(displayPageNoObj.prev)">
+                          <span>«</span>
+                        </a>
+                    </li>
+                    <li ng-class="{active:displayPageNoObj.pageNoDisplay + lnk == page}" ng-repeat="lnk in [0,1,2,3,4]">
+                        <a href data-ng-click="fetchPage(displayPageNoObj.pageNoDisplay + lnk)" ng-if="displayPageNoObj.pageNoDisplay + lnk <= displayPageNoObj.noOfPages">
+    											<span>{{displayPageNoObj.pageNoDisplay + lnk}}</span>
+    										</a>
+                    </li>
+                    <li>
+                        <a href data-ng-click="fetchPage(displayPageNoObj.next)">
+    											<span>»</span>
+    										</a>
+                    </li>
+                </ul>
+              </div>
+            </div>
           </div>
 					<!-- ADVERTISEMENT SECTION -->
-           <!-- <div class="row-fluid main-section" ng-show="hasInitAds()">
-                <div class="col-fluid alert alert-warning" ng-repeat="advertisement in parsedSearchResults.ads.slice(0,2) track by advertisement['@no']" ng-class="'ads-style'">
-                    <ads-item  adv="advertisement">
-                    </ads-item>
-                </div>
-            </div> -->
+            <div class="col-sm-12 main-section" ng-show="hasInitAds()">
+              <div class="row">
+                  <div class="col-fluid alert alert-warning" ng-repeat="advertisement in parsedSearchResults.ads.slice(0,2) track by advertisement['@no']" ng-class="'ads-style'" ng-hide="removeAds">
+                      <ads-item  adv="advertisement" remove-ads="removeAds">
+                      </ads-item>
+                  </div>
+              </div>
+            </div>
 						<!-- RESULTS SECTION -->
             <div class="row-fluid main-section">
                   <div class="col-fluid" ng-repeat="result  in parsedSearchResults.records track by result['@no']" >
                          <content-item  content="result">
                           </content-item>
                    </div>
+            </di v>
+            <!-- PAGINATION -->
+            <div class="row-fluid main-section col-sm-8 pull-right" ng-show="displayPageNoObj.noOfPages">
+              <ul class="pagination pull-right">
+                  <li>
+                      <a href data-ng-click="fetchPage(displayPageNoObj.prev)">
+                        <span>«</span>
+                      </a>
+                  </li>
+                  <li ng-class="{active:displayPageNoObj.pageNoDisplay + lnk == page}" ng-repeat="lnk in [0,1,2,3,4]">
+                      <a href data-ng-click="fetchPage(displayPageNoObj.pageNoDisplay + lnk)" ng-if="displayPageNoObj.pageNoDisplay + lnk <= displayPageNoObj.noOfPages">
+                        <span>{{displayPageNoObj.pageNoDisplay + lnk}}</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href data-ng-click="fetchPage(displayPageNoObj.next)">
+                        <span>»</span>
+                      </a>
+                  </li>
+              </ul>
             </div>
-					<!-- PAGINATION -->
-          <div class="row-fluid main-section col-sm-8 pull-right" ng-show="displayPageNoObj.noOfPages">
-            <ul class="pagination">
-                <li>
-                    <a href data-ng-click="fetchPage(displayPageNoObj.prev)">
-                      <span>«</span>
-                    </a>
-                </li>
-                <li ng-class="{active:displayPageNoObj.pageNoDisplay + lnk == page}" ng-repeat="lnk in [0,1,2,3,4]">
-                    <a href data-ng-click="fetchPage(displayPageNoObj.pageNoDisplay + lnk)" ng-if="displayPageNoObj.pageNoDisplay + lnk <= displayPageNoObj.noOfPages">
-                     <span>{{displayPageNoObj.pageNoDisplay + lnk}}</span>
-                   </a>
-                </li>
-                <li>
-                    <a href data-ng-click="fetchPage(displayPageNoObj.next)">
-                     <span>»</span>
-                   </a>
-                </li>
-            </ul>
-          </div>
 
             <div class="container" ng-show="usersCount == 0">
                 <h3>No Users Found</h3>
             </div>
 
-            <div class="row-fluid"  ng-show="startedSearch">
+            <div class="row-fluid margin-top-1 padding-10"  ng-show="startedSearch">
         			<span   ng-show="(parsedSearchResults.found <= 0 )">
         				Your search for<b> {{query}} </b>did not match any documents...
             			<br/><br/>
