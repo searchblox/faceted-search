@@ -147,6 +147,14 @@ angular.module('searchblox.service', [])
                 urlParam = urlParam + "&page=" + page;
             }
 
+            if(typeof(dataMap['collections']) !== "undefined" && dataMap['collections'] !== null && !isBlank(dataMap['collections'])){
+              for(colname in dataMap['collections']){
+                if(dataMap['collections'][colname]['checked'] == 'true'){
+                  urlParam = urlParam + "&cname=" + dataMap['collections'][colname]['name'];
+                }
+              }
+            }
+
             if (typeof(dataMap['pageSize']) !== "undefined" && dataMap['pageSize'] !== null && !isNaN(dataMap['pageSize'])) {
                 urlParam = urlParam + "&pagesize=" + dataMap['pageSize'];
             }
@@ -382,10 +390,12 @@ angular.module('searchblox.service', [])
                 resultobj["showAds"] = showAds(dataobj.searchform.collections,dataMap['collectionForAds']);
             }
             if(typeof(dataobj.searchform['collections']) !== "undefined" && dataobj.searchform['collections']!== null){
-              console.log(dataobj.searchform['collections']);
-              for(var item in dataobj.searchform['collections']){
-                console.log(item);
-                resultobj["collections"].push(item);
+              var collections = dataobj["searchform"]["collections"];
+              for(colname in collections){
+                resultobj['collections'].push({
+                  name: collections[colname]['@name'],
+                  checked: collections[colname]['@checked']
+                });
               }
             }
 

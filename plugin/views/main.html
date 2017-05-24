@@ -1,7 +1,9 @@
 <div ng-init="init()">
     <div class="col-sm-12">
       <div class="row">
-        <input type="checkbox" />
+        <span ng-repeat="collection in dataMap.collections">
+          <input type="checkbox" ng-checked="collection.checked" ng-click="collection.checked = !collection.checked;doSearch()"/>{{collection.name}}
+        </span>
       </div>
     </div>
     <form class="center-block" >

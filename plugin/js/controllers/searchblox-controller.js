@@ -138,7 +138,8 @@ angular.module('searchblox.controller', [])
                     $scope.rangeFilter, $scope.filterFields, $scope.page, $scope.dataMap);
                 searchbloxFactory.getResponseData(urlParams).then(function (searchResults) {
                     $scope.parsedSearchResults = searchbloxService.parseResults(searchResults.data, $scope.facetMap, $scope.dataMap);
-                    console.log($scope.parsedSearchResults);
+                    $scope.dataMap['collections'] = $scope.parsedSearchResults['collections'].slice();
+                    console.log($scope.dataMap['collections']);
                     //$scope.parsedLinks = searchbloxService.parseLinks(searchResults.data, $scope.facetMap);
                     // $scope.getTopClicked();
                     //$scope.getTagCloud();
