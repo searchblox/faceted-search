@@ -364,10 +364,11 @@ angular.module('searchblox.service', [])
             resultobj["showAds"] = false;
             resultobj["query"] = "";
             resultobj['collections'] = new Array();
+            resultobj["suggest"] = "";
             if(typeof(dataobj.results['@query']) !== "undefined"){ //TO STORE THE QUERY IN RESULT OBJECT
               resultobj["query"] = dataobj.results['@query'];
             }
-            if (typeof(dataobj.results) !== "undefined" && typeof(dataobj.results.result) !== "undefined") {
+            if (typeof(dataobj.results) !== "undefined" && typeof(dataobj.results.result) !== "undefined"){
                 for (var item in dataobj.results.result) {
                     if (item == "@no") {
                         resultobj["records"].push(computeResult(dataobj.results.result));
@@ -377,6 +378,9 @@ angular.module('searchblox.service', [])
                     resultobj["records"].push(computeResult(dataobj.results.result[item]));
                     resultobj["found"] = dataobj.results['@hits'];
                 }
+            }
+            if(resultobj["found"] <=0 ){
+              resultobj["suggest"] = dataobj.results['@suggest'];
             }
             if ( dataobj.ads !== null && typeof(dataobj.ads)!== "undefined"){
                 resultobj["ads"] = new Array();
@@ -524,6 +528,7 @@ angular.module('searchblox.service', [])
                     }
                 }
             }
+            console.log(resultobj);
             return resultobj;
         }
     }]);

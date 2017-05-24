@@ -1,8 +1,8 @@
 <div ng-init="init()">
     <div class="col-sm-12">
       <div class="row">
-        <span ng-repeat="collection in dataMap.collections">{{collection}}
-          <input type="checkbox" ng-checked="collection.checked" ng-click="checkToggle(collection)"/>{{collection}}
+        <span ng-repeat="collection in dataMap.collections">
+          <input type="checkbox" ng-checked="{{collection.checked}}" ng-click="checkToggle(collection)"/>{{collection.name}}
         </span>
       </div>
     </div>

@@ -149,6 +149,8 @@
 
             <div class="row-fluid margin-top-1 padding-10"  ng-show="startedSearch">
         			<span   ng-show="(parsedSearchResults.found <= 0 )">
+                <i>Did you mean: <b>{{parsedSearchResults.suggest}}</b> ? </i>
+                <br><br>
         				Your search for<b> {{query}} </b>did not match any documents...
             			<br/><br/>
             		* Suggestions: Make sure all words are spelled correctly.</br>
