@@ -165,6 +165,12 @@ angular.module('searchblox.controller', [])
                 });
             }
 
+            // COLLECTION CHECKBOXES TO SELECT MULTIPLE COLLECTIONS
+            $scope.checkToggle = function(collection){
+              collection['checked'] = !collection['checked'];
+              $scope.doSearch();
+            }
+
             // Sort function
             $scope.doSort = function (sortVal) {
                 $scope.dataMap['sortVal'] = sortVal;
