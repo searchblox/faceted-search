@@ -1,4 +1,9 @@
 <div ng-init="init()">
+    <div class="col-sm-12">
+      <div class="row">
+        <input type="checkbox" />
+      </div>
+    </div>
     <form class="center-block" >
         <custominput id="xyz" ng-model="query" onsearch="startSearch" inputstyle="inputClass" howmany="howmany()" howmanynofsuggest="howmanynofsuggest()" show-auto-suggest="showAutoSuggest">
             <autocomplete source="loadItems" ng-show="showAutoSuggest"></autocomplete>
