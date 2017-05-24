@@ -32,7 +32,7 @@
 								<div class="col-sm-12">
 									<div class="col-sm-12 padding-10">
 										<div class="row">
-			                <span style="font-weight: bold" class="font-color filter-type" ng-bind="facetMap[facet['name']]['display']"></span>
+			                <span class="font-color filter-type" ng-click="showFilters = !showFilters"><span ng-hide="showFilters">+ </span>{{facetMap[facet['name']]['display']}}</span>
 											<span class="glyphicon glyphicon-chevron-down pull-right font-color chevron-down-icon" ng-click="showUptoColFilterCountFlag = !showUptoColFilterCountFlag" ng-hide="facet['name'] == 'lastmodified'"></span>
 										</div>
                     <div class="col-sm-10 showUptoColFilterCount padding-10" ng-click="colFilterCountChange(facet['name']);showUptoColFilterCountFlag = !showUptoColFilterCountFlag;" ng-show="showUptoColFilterCountFlag">
@@ -40,17 +40,19 @@
                     </div>
 									</div>
 
-									<div class="col-sm-12">
+									<div class="col-sm-12" ng-show="showFilters">
 										<div class="row">
-			                <ul>
-			                    <li ng-repeat="filter in facet[facet['name']][1]" class="padding-5">
-			                        <span data-ng-click="doSearchByFilter(filter, facet['name'])" ng-show="filter['@name']" class="font-color filter-options">
-			                            <span ng-bind-html="filter['@name'] | trust" forcloudrel="{{filter['#text']}}"
-			                                  forcloudtag="{{filter['@name']}}" class="facetText word-break-filter"></span>
-			                            ({{filter["#text"]}})
-			                        </span>
-			                    </li>
-			                </ul>
+                      <div class="row">
+  			                <ul>
+  			                    <li ng-repeat="filter in facet[facet['name']][1]" class="padding-5">
+  			                        <span data-ng-click="doSearchByFilter(filter, facet['name'])" ng-show="filter['@name']" class="font-color filter-options">
+  			                            <span ng-bind-html="filter['@name'] | trust" forcloudrel="{{filter['#text']}}"
+  			                                  forcloudtag="{{filter['@name']}}" class="facetText word-break-filter"></span>
+  			                            ({{filter["#text"]}})
+  			                        </span>
+  			                    </li>
+  			                </ul>
+                      </div>
 										</div>
 									</div>
 								</div>
@@ -116,7 +118,7 @@
 						<!-- RESULTS SECTION -->
             <div class="row-fluid main-section">
                   <div class="col-fluid" ng-repeat="result  in parsedSearchResults.records track by result['@no']" >
-                         <content-item  content="result">
+                         <content-item  content="result" do-mlt-search="doMltSearch(mltId, mltCol, page)">
                           </content-item>
                    </div>
             </di v>

@@ -45,6 +45,8 @@ angular.module('searchblox.controller', [])
 
             $scope.removeAds = false; //TO HIDE ADS IF TRUE
             $scope.showUptoColFilterCountFlag = false; //COUNT TO SHOW THE NUMBER OF COLLECTION FILTERS
+            $scope.showFilters = true; //Toggle filters
+
 
             // load autosuggest items
             $scope.loadItems = function (term) {
@@ -130,14 +132,31 @@ angular.module('searchblox.controller', [])
             }
             // Search function
             $scope.doSearch = function () {
+                $scope.dataMap['mlt'] = false;
                 $scope.currentPage = $scope.page;
                 var urlParams = searchbloxService.getUrlParams(searchUrl, $scope.query,
                     $scope.rangeFilter, $scope.filterFields, $scope.page, $scope.dataMap);
                 searchbloxFactory.getResponseData(urlParams).then(function (searchResults) {
                     $scope.parsedSearchResults = searchbloxService.parseResults(searchResults.data, $scope.facetMap, $scope.dataMap);
-                    $scope.parsedLinks = searchbloxService.parseLinks(searchResults.data, $scope.facetMap);
+                    //$scope.parsedLinks = searchbloxService.parseLinks(searchResults.data, $scope.facetMap);
                     // $scope.getTopClicked();
                     //$scope.getTagCloud();
+                    $scope.startedSearch = true;
+                    $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
+                    $scope.displayPageNo();
+                });
+            }
+
+            $scope.doMltSearch = function (mltId, mltCol, page) {
+                $scope.dataMap['mlt'] = true;
+                $scope.mltId = mltId;
+                $scope.mltCol = mltCol;
+                $scope.currentPage = page;
+                $scope.page = page;
+                var urlParams = searchUrl + "?xsl=json&mlt_col=" + mltCol + "&mlt_id=" + mltId + "&XPC=" + page;
+                searchbloxFactory.getResponseData(urlParams).then(function (searchResults) {
+                  searchResults.data.results['@query'] = $scope.parsedSearchResults.query;
+                    $scope.parsedSearchResults = searchbloxService.parseResults(searchResults.data, $scope.facetMap, $scope.dataMap);
                     $scope.startedSearch = true;
                     $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
                     $scope.displayPageNo();
@@ -352,7 +371,7 @@ angular.module('searchblox.controller', [])
             $scope.fetchPage = function (pageNo) {
                 $scope.page = pageNo;
                 $scope.prevPage = pageNo;
-                $scope.doSearch();
+                ($scope.dataMap['mlt'] == true)?$scope.doMltSearch($scope.mltId, $scope.mltCol, $scope.page):$scope.doSearch();
             }
 
             $scope.displayPageNo = function(){

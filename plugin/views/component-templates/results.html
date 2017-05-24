@@ -3,6 +3,7 @@
     <div class="row">
       <div class="row-fluid line-height-24">
           <a href="{{url}}" target="_blank" class="search-result-title"><b>{{content.title}}</b></a>
+          <a href="javascript:void(0)" ng-click="doMltSearch({mltId: content.uid, mltCol: content.col, page: '1'})">More Like This</a>
       </div>
 
       <!-- TO DISPLAY VIDEOS FOR VIDEO RESULTS -->

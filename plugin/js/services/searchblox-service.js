@@ -29,7 +29,7 @@ angular.module('searchblox.service', [])
 
                 values[facets[i].field] = {};
                 values[facets[i].field]["display"] = facets[i].display;
-                
+
                 if (facets[i].size !== undefined && facets[i].size !== null) {
                     fields = fields + '&f.' + facets[i].field + '.size=' + facets[i].size;
                     values[facets[i].field]["size"] = facets[i].size;
@@ -137,6 +137,12 @@ angular.module('searchblox.service', [])
                 urlParam = urlParam + "&sort=" + dataMap['sortVal'];
             }
 
+            if(typeof( dataMap['mlt']) !== "undefined" && dataMap['mlt'] !== null && !isBlank(dataMap['mlt'])){
+              if (typeof( dataMap['mlt'].mltId) !== "undefined" && dataMap['mlt'].mltId !== null && !isBlank(dataMap['mlt'].mltId) && typeof( dataMap['mlt'].mltCol) !== "undefined" && dataMap['mlt'].mltCol !== null && !isBlank(dataMap['mlt'].mltCol)) {
+                  urlParam = urlParam + "&mlt_id=" + dataMap['mlt'].mltId + "&mlt_col=" + dataMap['mlt'].mltCol;
+              }
+            }
+
             if (typeof(page) !== "undefined" && page !== null && !isNaN(page)) {
                 urlParam = urlParam + "&page=" + page;
             }
@@ -199,7 +205,7 @@ angular.module('searchblox.service', [])
             }
         }
 
-        this.parseLinks = function (dataobj, facetFieldsMap) {
+        /*this.parseLinks = function (dataobj, facetFieldsMap) {
             var resultobj = new Object();
             // resultobj["npages"] = new Array();
             resultobj["pages"] = new Array();
@@ -223,7 +229,7 @@ angular.module('searchblox.service', [])
                 }
             }
             return resultobj;
-        }
+        }*/
 
         // return array of advertisements
         function getAds(adsObj){
@@ -376,6 +382,25 @@ angular.module('searchblox.service', [])
             }
 
             if (typeof(dataobj.facets) !== "undefined") {
+              /* REORDERING FACETS */
+                var modifyFacetArray = (dataobj.facets).slice();
+                for(var i=0, len = modifyFacetArray.length; i < len; i++){
+                  if(modifyFacetArray[i]['@name'] == 'contenttype'){
+                    dataobj.facets[0] = modifyFacetArray[i];
+                  }
+                  else if(modifyFacetArray[i]['@name'] == 'keywords'){
+                    dataobj.facets[1] = modifyFacetArray[i];
+                  }
+                  else if(modifyFacetArray[i]['@name'] == 'colname'){
+                    dataobj.facets[2] = modifyFacetArray[i];
+                  }
+                  else if(modifyFacetArray[i]['@name'] == 'lastmodified'){
+                    dataobj.facets[3] = modifyFacetArray[i];
+                  }
+                  else if(modifyFacetArray[i]['@name'] == 'size'){
+                    dataobj.facets[4] = modifyFacetArray[i];
+                  }
+                }
                 if (dataobj.facets) {
                     resultobj["facets"] = new Object();
                     if (dataobj.facets.facet) {
@@ -475,12 +500,14 @@ angular.module('searchblox.service', [])
                                     facetsobj[fname] = [count, values];
                                 }
                             }
+                            console.log(facetsobj);
                             resultobj["facets"][n] = facetsobj;
                         }
                         this.noffilters = n;
                     }
                 }
             }
+            console.log(resultobj["facets"]);
             return resultobj;
         }
     }]);

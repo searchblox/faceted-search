@@ -148,6 +148,10 @@ body{
   font-weight: bold;
 }
 
+.filter-type:hover{
+  cursor: pointer;
+}
+
 .chevron-down-icon{
   margin-right: 4em;
   cursor: pointer;
