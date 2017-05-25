@@ -7,7 +7,6 @@ angular.module('searchblox.factory',[]).factory('searchbloxFactory', ['$rootScop
     var searchFactory = new Object();
     console.log('x');
     searchFactory.getResponseData = function (urlParams) {
-    console.log(urlParams);
         var promise = $http.get(urlParams).success(function (data, status) {
             return data;
         }).error(function (data, status) {

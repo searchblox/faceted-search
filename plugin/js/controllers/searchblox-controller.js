@@ -167,7 +167,9 @@ angular.module('searchblox.controller', [])
 
             // COLLECTION CHECKBOXES TO SELECT MULTIPLE COLLECTIONS
             $scope.checkToggle = function(collection){
+              console.log(collection);
               collection['checked'] = !collection['checked'];
+                console.log(collection);
               $scope.doSearch();
             }
 

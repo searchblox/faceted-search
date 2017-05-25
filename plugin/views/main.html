@@ -48,7 +48,7 @@
     <div class="col-sm-12">
       <div class="row checkboxDiv">
         <span ng-repeat="collection in dataMap.collections">
-          <input type="checkbox" ng-checked="{{collection.checked}}" ng-click="checkToggle(collection)" id="{{collection.name}}" hidden/><label class="checkboxlabel" ng-click="checkToggle(collection)" for="{{collection.name}}">{{collection.name}}</label>
+          <input type="checkbox" ng-checked="{{collection.checked}}" id="{{collection.name}}" hidden/><label class="checkboxlabel" ng-click="checkToggle(collection)" for="{{collection.name}}">{{collection.name}}</label>
         </span>
       </div>
     </div>
