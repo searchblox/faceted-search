@@ -139,7 +139,6 @@ angular.module('searchblox.controller', [])
                 searchbloxFactory.getResponseData(urlParams).then(function (searchResults) {
                     $scope.parsedSearchResults = searchbloxService.parseResults(searchResults.data, $scope.facetMap, $scope.dataMap);
                     $scope.dataMap['collections'] = $scope.parsedSearchResults['collections'].slice();
-                    console.log($scope.dataMap['collections']);
                     //$scope.parsedLinks = searchbloxService.parseLinks(searchResults.data, $scope.facetMap);
                     // $scope.getTopClicked();
                     //$scope.getTagCloud();
@@ -167,9 +166,7 @@ angular.module('searchblox.controller', [])
 
             // COLLECTION CHECKBOXES TO SELECT MULTIPLE COLLECTIONS
             $scope.checkToggle = function(collection){
-              console.log(collection);
-              collection['checked'] = !collection['checked'];
-                console.log(collection);
+              collection['checked'] == "true"?(collection['checked'] = "false"):(collection['checked'] = "true");
               $scope.doSearch();
             }
 

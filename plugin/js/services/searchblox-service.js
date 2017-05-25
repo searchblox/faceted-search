@@ -85,7 +85,6 @@ angular.module('searchblox.service', [])
             //var values = new Array();
             var collectionString = "";
             for (var i in collection) {
-                console.log(i);
                 //  values.push(collection[i]);
                 collectionString = collectionString + '&col=' + collection[i];
             }
@@ -292,6 +291,7 @@ angular.module('searchblox.service', [])
             var t = recstr.substring(recstr.lastIndexOf('.') + 1).toLowerCase();
             var isImage = false;
             var isVideo = false;
+            var parser = new DOMParser();
 
             if (recstr.startsWith('http') || recstr.startsWith('https')) {
                 if (t == "jpg" || t == "jpeg" || t == "png" || t == "gif" || t == "bmp") {
@@ -330,6 +330,7 @@ angular.module('searchblox.service', [])
             } else {
                 computedResult.contentNature = "href";
             }
+            computedResult['description'] = parser.parseFromString(computedResult['description'], 'text/html').body.textContent; // TO DECODE THE SPECIAL CHARACTERS
             return computedResult;
         }
 
@@ -528,7 +529,6 @@ angular.module('searchblox.service', [])
                     }
                 }
             }
-            console.log(resultobj);
             return resultobj;
         }
     }]);
