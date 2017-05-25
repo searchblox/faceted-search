@@ -75,6 +75,57 @@ body{
   padding: 0 !important;
 }
 
+/* CHECKBOXES STYLES */
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  position: relative;
+  padding-left: 1.95em;
+  cursor: pointer;
+}
+
+/* checkbox aspect */
+.checkboxDiv{
+  text-align: center;
+  padding-top: 1em;
+}
+
+[type="checkbox"]:not(:checked) + label:before, [type="checkbox"]:checked + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.25em;
+  height: 1.25em;
+  border: 1px solid grey;
+  background: #fff;
+}
+/* checked mark aspect */
+[type="checkbox"]:not(:checked) + label:after, [type="checkbox"]:checked + label:after {
+  content: '✔';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 1.3em;
+  line-height: 0.8;
+  color: #619ED5;
+  transition: all .2s;
+}
+/* checked mark aspect changes */
+[type="checkbox"]:not(:checked) + label:after {
+  opacity: 0;
+  transform: scale(0);
+}
+
+[type="checkbox"]:checked + label:after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* hover style just for information */
+label:hover:before {
+  border: 1px solid black !important;
+}
+
 /* INPUT FIELD GROUP */
 .settings-image > span{
   display: block;

@@ -56,7 +56,7 @@ angular.module('searchblox.custominput',[])
             '               </a>' +
             '              </span> </div>' +
             '            <div class="input-group-btn"> '+
-            '               <button type="button" class="btn btn-primary border-radius-0"><i class="fa fa-search"></i></button>' +
+            '               <button type="button" class="btn btn-primary border-radius-0" ng-click="onsearch()"><i class="fa fa-search"></i></button>' +
             '            </div>' +
             '         </div>' +
             '<div ng-transclude></div>' +
@@ -162,8 +162,6 @@ angular.module('searchblox.custominput',[])
                 key = e.keyCode;
                 if (key === KEYS.enter && scope.options.addOnEnter) {
                     scope.onsearch();
-
-
                 }
             });
             element.find('div').bind('click', function () {
