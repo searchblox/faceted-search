@@ -4,7 +4,7 @@
 'use strict';
 //var rootUrl = "http://185.73.37.206:8080";
 //var rootUrl = "http://92.222.88.95:8080";
-var rootUrl = "http://localhost:8080";
+//var rootUrl = "http://localhost:8080";
 // CONTROLLER
 angular.module('searchblox.controller', [])
     .controller('searchbloxController', ['$rootScope', '$scope', '$http', '$location', 'searchbloxService', 'searchbloxFactory', 'facetFactory', '$q', '$timeout', '$sce',

@@ -62,8 +62,8 @@
 								<div class="col-sm-12">
 									<div class="col-sm-12 padding-10">
 										<div class="row">
-			                <span class="font-color filter-type" ng-click="showFilters = !showFilters"><span ng-hide="showFilters">+ </span>{{facet['display']}}</span>
-											<span class="glyphicon glyphicon-chevron-down pull-right font-color chevron-down-icon" ng-click="showUptoColFilterCountFlag = !showUptoColFilterCountFlag" ng-hide="facet['field'] == 'lastmodified'"></span>
+			                <span class="font-color filter-type col-sm-7" ng-click="showFilters = !showFilters"><span ng-hide="showFilters">+ </span>{{facet['display']}}</span>
+											<span class="glyphicon glyphicon-chevron-down font-color chevron-down-icon" ng-click="showUptoColFilterCountFlag = !showUptoColFilterCountFlag" ng-hide="facet['field'] == 'lastmodified'"></span>
 										</div>
                     <div class="col-sm-10 showUptoColFilterCount padding-10" ng-click="colFilterCountChange(facet['field']);showUptoColFilterCountFlag = !showUptoColFilterCountFlag;" ng-show="showUptoColFilterCountFlag">
                       <div>show upto {{facet.size}}</div>
@@ -72,7 +72,6 @@
 
                   <div class="col-sm-12" ng-show="showFilters">
 										<div class="row">
-                      <div class="row">
   			                <ul>
                           <span ng-repeat="facetResult in parsedSearchResults.facets">
   			                    <li ng-repeat="filter in facetResult[facet['field']][1]" class="padding-5">
@@ -84,7 +83,6 @@
   			                    </li>
                           </span>
   			                </ul>
-                      </div>
 										</div>
 									</div>
 								</div>

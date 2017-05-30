@@ -204,7 +204,7 @@ label:hover:before {
 }
 
 .chevron-down-icon{
-  margin-right: 4em;
+/*  margin-right: 4em;*/
   cursor: pointer;
 }
 
