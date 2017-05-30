@@ -126,7 +126,6 @@ angular.module('searchblox.controller', [])
 
 
             $scope.startSearch = function(){
-              console.log("start search is called" + $scope.query);
                 $scope.from = 0;
                 $scope.page = 1;
                 $scope.prevPage = 1;
@@ -141,6 +140,7 @@ angular.module('searchblox.controller', [])
                 searchbloxFactory.getResponseData(urlParams).then(function (searchResults) {
                     $scope.parsedSearchResults = searchbloxService.parseResults(searchResults.data, $scope.facetMap, $scope.dataMap);
                     $scope.dataMap['collections'] = $scope.parsedSearchResults['collections'].slice();
+                    console.log($scope.parsedSearchResults);
                     //$scope.parsedLinks = searchbloxService.parseLinks(searchResults.data, $scope.facetMap);
                     // $scope.getTopClicked();
                     //$scope.getTagCloud();
