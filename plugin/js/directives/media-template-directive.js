@@ -41,7 +41,8 @@ angular.module('searchblox.contentItem', []).
             restrict: 'E',
             scope: {
                 content:'=',
-                doMltSearch: '&'
+                doMltSearch: '&',
+                mltShow: '&'
             },
             link: linker,
             controller: function ($scope) {

@@ -449,4 +449,16 @@ angular.module('searchblox.controller', [])
                 }
                 return false;
             }
+
+            $scope.mltShow = function(uid, url, type){
+              if(uid != url){
+                return true;
+              }
+              else if(uid == url && type == 'HTML'){
+                return true;
+              }
+              else{
+                return false;
+              }
+            };
 }]);

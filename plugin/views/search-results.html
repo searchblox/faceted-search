@@ -151,7 +151,7 @@
 						<!-- RESULTS SECTION -->
             <div class="row-fluid main-section">
                   <div class="col-fluid" ng-repeat="result  in parsedSearchResults.records track by result['@no']" >
-                         <content-item  content="result" do-mlt-search="doMltSearch(mltId, mltCol, page)">
+                         <content-item  content="result" do-mlt-search="doMltSearch(mltId, mltCol, page)" mlt-show="mltShow(uid, url, type)">
                           </content-item>
                    </div>
             </di v>
