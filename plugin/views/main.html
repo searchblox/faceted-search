@@ -54,7 +54,7 @@
     </div>
 
     <form class="center-block" >
-        <custominput id="xyz" ng-model="query" onsearch="startSearch" inputstyle="inputClass" howmany="howmany()" howmanynofsuggest="howmanynofsuggest()" show-auto-suggest="showAutoSuggest">
+        <custominput id="xyz" search-param="query" onsearch="startSearch" inputstyle="inputClass" howmany="howmany()" howmanynofsuggest="howmanynofsuggest()" show-auto-suggest="showAutoSuggest">
             <autocomplete source="loadItems" ng-show="showAutoSuggest"></autocomplete>
         </custominput>
     </form>

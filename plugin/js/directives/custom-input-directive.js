@@ -32,12 +32,12 @@ angular.module('searchblox.custominput',[])
 
     return {
         restrict: 'A,E',
-        scope: { searchParam: '=ngModel', onsearch: '=', inputstyle:"=inputstyle", howmany: "&",howmanynofsuggest: "&", showAutoSuggest: "="},
+        scope: { searchParam: '=', onsearch: '=', inputstyle:"=inputstyle", howmany: "&",howmanynofsuggest: "&", showAutoSuggest: "="},
         replace: false,
         transclude: true,
         template: '<div class="{{inputstyle.name}}"> <br>' +
             '         <div class="input-group input-group-lg">' +
-            '            <input type="text" class="form-control border-radius-0 input-search" placeholder="Search Term" ng-model="searchParam" ng-change="newTagChange()" autofocus/>' +
+            '            <input type="text" class="form-control border-radius-0 input-search" placeholder="Search Term" ng-model="searchParam" ng-change="newTagChange() " autofocus/>' +
             '             <div class="input-group-addon settings-image"> <span>' +
             '               <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <img ng-src="images/settings.png"/>' +
               '               <ul class="dropdown-menu settings-dropdown">' +
@@ -62,6 +62,7 @@ angular.module('searchblox.custominput',[])
             '<div ng-transclude></div>' +
             '</div>',
         controller: ["$scope", "$attrs", "$element", function ($scope, $attrs, $element) {
+            var self = this;
             loadOptions($scope, $attrs);
             // do search options
             $scope.partialMatch = function () {
@@ -77,8 +78,7 @@ angular.module('searchblox.custominput',[])
                     }
                 }
                 $scope.searchParam = newstring;
-                $scope.onsearch();
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
 
             $scope.fuzzyMatch = function () {
@@ -94,9 +94,9 @@ angular.module('searchblox.custominput',[])
                     }
                 }
                 $scope.searchParam = newstring;
-                $scope.onsearch();
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
+
             $scope.exactMatch = function () {
                 var newvals = $scope.searchParam.replace(/"/gi, '').replace(/\*/gi, '').replace(/\~/gi, '').split(' ');
                 var newstring = "";
@@ -111,22 +111,20 @@ angular.module('searchblox.custominput',[])
                 }
                 $.trim(newstring, ' ');
                 $scope.searchParam = "\"" + newstring + "\"";
-                $scope.onsearch();
-
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
+
             $scope.matchAll = function () {
                 $scope.searchParam = $.trim($scope.searchParam.replace(/ OR /gi, ' '));
                 $scope.searchParam = ($scope.searchParam.replace(/ /gi, ' AND '));
-                $scope.onsearch();
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
+
             $scope.matchAny = function () {
                 $scope.searchParam = $.trim($scope.searchParam.replace(/ AND /gi, ' '));
                 $scope.searchParam = $scope.searchParam.replace(/ /gi, ' OR ');
                 $scope.searchParam.focus().trigger('keyup');
-                $scope.onsearch();
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
 
             $scope.newTagChange = angular.noop;
@@ -135,6 +133,7 @@ angular.module('searchblox.custominput',[])
                 var input = $element.find('input');
                 input.changeValue = function (value) {
                     $scope.searchParam = value;
+                    $scope.onsearch();
                 };
 
                 input.change = function (handler) {
@@ -145,6 +144,13 @@ angular.module('searchblox.custominput',[])
 
                 return input;
             };
+
+            $scope.$watch('searchParam', function(){
+              setTimeout(function(){
+                self.getNewTagInput().changeValue($scope.searchParam);
+              }, 500);
+            });
+
 
         }],
 

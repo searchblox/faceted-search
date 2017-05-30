@@ -28,6 +28,7 @@ angular.module('searchblox.service', [])
                 fields = fields + '&facet.field=' + facets[i].field;
 
                 values[facets[i].field] = {};
+                values[facets[i].field]["field"] = facets[i].field;
                 values[facets[i].field]["display"] = facets[i].display;
 
                 if (facets[i].size !== undefined && facets[i].size !== null) {
@@ -299,7 +300,7 @@ angular.module('searchblox.service', [])
                 } else if (t == "mpeg" || t == "mp4" || t == "flv" || t == "mpg") {
                     isVideo = true;
                 }
-                computedResult.contentUrl = recstr;
+                computedResult.contentUrl = encodeURIComponent(recstr);
             } else if (recstr.startsWith('/') || recstrf.startsWith(':')) {
                 if (t == "jpg" || t == "jpeg" || t == "png" || t == "gif" || t == "bmp") {
                     var isImage = true;
@@ -307,7 +308,7 @@ angular.module('searchblox.service', [])
                 } else if (t == "mpeg" || t == "mp4" || t == "flv" || t == "mpg") {
                     isVideo = true;
                 }
-                computedResult.contentUrl = '../servlet/FileServlet?url=' + recstr + '&col=' + colid;
+                computedResult.contentUrl = '../servlet/FileServlet?url=' + encodeURIComponent(recstr) + '&col=' + colid;
                 if (result.url.lastIndexOf('http', 0) === 0) {
                     computedResult.contentUrl = result.url;
                 }

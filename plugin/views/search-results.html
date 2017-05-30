@@ -28,7 +28,7 @@
 							</div>
 						</div>
 
-	            <div ng-repeat="facet in parsedSearchResults.facets" ng-if="facetMap[facet['name']]['display']" ng-hide="facetMap[facet['name']]['display'] == 'Size'">    <!-- OLD VALUE - ng-if="parsedSearchResults.records.length" -->
+	       <!--     <div ng-repeat="facet in parsedSearchResults.facets" ng-if="facetMap[facet['name']]['display']" ng-hide="facetMap[facet['name']]['display'] == 'Size'">
 								<div class="col-sm-12">
 									<div class="col-sm-12 padding-10">
 										<div class="row">
@@ -51,6 +51,38 @@
   			                            ({{filter["#text"]}})
   			                        </span>
   			                    </li>
+  			                </ul>
+                      </div>
+										</div>
+									</div>
+								</div>
+	            </div> -->
+
+              <div ng-repeat="facet in facetMap" ng-hide="facet['display'] == 'Size'">
+								<div class="col-sm-12">
+									<div class="col-sm-12 padding-10">
+										<div class="row">
+			                <span class="font-color filter-type" ng-click="showFilters = !showFilters"><span ng-hide="showFilters">+ </span>{{facet['display']}}</span>
+											<span class="glyphicon glyphicon-chevron-down pull-right font-color chevron-down-icon" ng-click="showUptoColFilterCountFlag = !showUptoColFilterCountFlag" ng-hide="facet['field'] == 'lastmodified'"></span>
+										</div>
+                    <div class="col-sm-10 showUptoColFilterCount padding-10" ng-click="colFilterCountChange(facet['field']);showUptoColFilterCountFlag = !showUptoColFilterCountFlag;" ng-show="showUptoColFilterCountFlag">
+                      <div>show upto {{facet.size}}</div>
+                    </div>
+									</div>
+
+                  <div class="col-sm-12" ng-show="showFilters">
+										<div class="row">
+                      <div class="row">
+  			                <ul>
+                          <span ng-repeat="facetResult in parsedSearchResults.facets">
+  			                    <li ng-repeat="filter in facetResult[facet['field']][1]" class="padding-5">
+  			                        <span data-ng-click="doSearchByFilter(filter, facet['field'])" ng-show="filter['@name']" class="font-color filter-options">
+  			                            <span ng-bind-html="filter['@name'] | trust" forcloudrel="{{filter['#text']}}"
+  			                                  forcloudtag="{{filter['@name']}}" class="facetText word-break-filter"></span>
+  			                            ({{filter["#text"]}})
+  			                        </span>
+  			                    </li>
+                          </span>
   			                </ul>
                       </div>
 										</div>
@@ -79,9 +111,10 @@
     					<!-- SORTING -->
     					<div id="sort_btn_aligner" ng-show="parsedSearchResults.found > 0" class="col-sm-4 pull-left sort-align">
                   <a  href="" ng-repeat="sortBtn in sortBtns"  data-ng-click="doSort(sortBtn['sortVal'])">
-                      <span ng-if="sortBtn['sortVal'] == 'relevance'"></span>
-                      <span ng-if="sortBtn['sortVal'] == 'alpha'">Sort Alphbetically</span>
                       <span ng-if="sortBtn['sortVal'] == 'date'">Sort by Date</span>
+                  </a>
+                  <a  href="" ng-repeat="sortBtn in sortBtns"  data-ng-click="doSort(sortBtn['sortVal'])">
+                      <span ng-if="sortBtn['sortVal'] == 'alpha'">Sort Alphbetically</span>
                   </a>
     	        </div>
     					<!-- PAGINATION -->
@@ -149,7 +182,7 @@
 
             <div class="row-fluid margin-top-1 padding-10"  ng-show="startedSearch">
         			<span   ng-show="(parsedSearchResults.found <= 0 )">
-                <i>Did you mean: <b>{{parsedSearchResults.suggest}}</b> ? </i>
+                <i ng-if="parsedSearchResults.suggest">Did you mean: <b>{{parsedSearchResults.suggest}}</b> ? </i>
                 <br><br>
         				Your search for<b> {{query}} </b>did not match any documents...
             			<br/><br/>

@@ -23,8 +23,8 @@
     "collection":[],
     "collectionForAds":[],
     "sortBtns":[
-		{"field":"alpha","display":"Alphabetic"},
 		{"field":"date","display":"Date"},
+		{"field":"alpha","display":"Alphabetic"},
 		{"field":"relevance","display":"Relevance"}
     ],
     "matchAny":"off",

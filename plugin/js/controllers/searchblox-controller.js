@@ -46,6 +46,7 @@ angular.module('searchblox.controller', [])
             $scope.removeAds = false; //TO HIDE ADS IF TRUE
             $scope.showUptoColFilterCountFlag = false; //COUNT TO SHOW THE NUMBER OF COLLECTION FILTERS
             $scope.showFilters = true; //Toggle filters
+            $scope.playVideo = false; // FOR VIDEO RESULTS PLAY ICON
 
 
             // load autosuggest items
@@ -125,6 +126,7 @@ angular.module('searchblox.controller', [])
 
 
             $scope.startSearch = function(){
+              console.log("start search is called" + $scope.query);
                 $scope.from = 0;
                 $scope.page = 1;
                 $scope.prevPage = 1;
