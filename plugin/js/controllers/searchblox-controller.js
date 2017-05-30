@@ -10,9 +10,9 @@ angular.module('searchblox.controller', [])
     .controller('searchbloxController', ['$rootScope', '$scope', '$http', '$location', 'searchbloxService', 'searchbloxFactory', 'facetFactory', '$q', '$timeout', '$sce',
         function ($rootScope, $scope, $http, $location, searchbloxService, searchbloxFactory, facetFactory, $q, $timeout, $sce) {// 'autoCompleteFactory',
 
-            var searchUrl = rootUrl+'/searchblox/servlet/SearchServlet';
-            var autoSuggestUrl = rootUrl+'/searchblox/servlet/AutoSuggest';
-            var reportServletUrl = rootUrl+'/searchblox/servlet/ReportServlet';
+            var searchUrl = '/searchblox/servlet/SearchServlet';
+            var autoSuggestUrl = '/searchblox/servlet/AutoSuggest';
+            var reportServletUrl = '/searchblox/servlet/ReportServlet';
 
             // Hard coded these values. This needs to be dynamic
             //var facet = 'on';
