@@ -300,7 +300,7 @@ angular.module('searchblox.service', [])
                 } else if (t == "mpeg" || t == "mp4" || t == "flv" || t == "mpg") {
                     isVideo = true;
                 }
-                computedResult.contentUrl = encodeURIComponent(recstr);
+                computedResult.contentUrl = recstr;
             } else if (recstr.startsWith('/') || recstrf.startsWith(':')) {
                 if (t == "jpg" || t == "jpeg" || t == "png" || t == "gif" || t == "bmp") {
                     var isImage = true;
