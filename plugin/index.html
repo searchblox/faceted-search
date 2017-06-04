@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <meta charset="utf-8"/>
+
     <script src="lib/jquery-2.1.0.min.js"></script>
 
     <script type="text/javascript" src="lib/angular.min.js" charset="UTF-8"></script>
@@ -15,8 +16,8 @@
     <script type="text/javascript" src="lib/moment.js" charset="UTF-8"></script>
     <script type="text/javascript" src="lib/json2extension.js" charset="UTF-8"></script>
 
-    <script src="lib/jquery-ui/jquery-ui.min.js"></script>
     <link rel="stylesheet" type="text/css" href="lib/jquery-ui/themes/smoothness/jquery-ui.min.css">
+    <script src="lib/jquery-ui/jquery-ui.min.js"></script>
 
     <script src="lib/ui-bootstrap-tpls-0.10.0.js" charset="UTF-8"></script>
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
@@ -29,6 +30,7 @@
     <script src="js/controllers/searchblox-controller.js" charset="UTF-8"></script>
     <script src="js/directives/autocomplete-directive.js" charset="UTF-8"></script>
     <script src="js/directives/custom-input-directive.js" charset="UTF-8"></script>
+    <script src="js/directives/date-directive.js" charset="UTF-8"></script>
     <script src="js/directives/media-template-directive.js" charset="UTF-8"></script>
     <script src="js/directives/ads-template-directive.js" charset="UTF-8"></script>
     <script src="js/factories/searchblox-factory.js" charset="UTF-8"></script>
@@ -62,8 +64,10 @@
     <div ng-view=""></div>
 
     <div id="footer" align="center">
-        <span class="app-font">Copyright {{ddate}} SearchBlox Software, Inc.</span>
-        <span class="links">&nbsp;<a href="http://www.searchblox.com" target="_blank">Contact Us</a></span>
+        <span>Copyright {{ddate}} SearchBlox Software, Inc.</span>
+        <span class="links">&nbsp;<a href="http://www.searchblox.com" target="_blank">Contact Us</a>
+          &nbsp;|&nbsp;<a href="/searchblox/search/secure/securesearch.jsp">Secure Search</a>
+        </span>
     </div>
 
 </div>

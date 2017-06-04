@@ -4,19 +4,19 @@
 'use strict';
 //var rootUrl = "http://185.73.37.206:8080";
 //var rootUrl = "http://92.222.88.95:8080";
-//var rootUrl = "http://localhost:8080";
+var rootUrl = "http://localhost:8080";
 // CONTROLLER
 angular.module('searchblox.controller', [])
     .controller('searchbloxController', ['$rootScope', '$scope', '$http', '$location', 'searchbloxService', 'searchbloxFactory', 'facetFactory', '$q', '$timeout', '$sce',
         function ($rootScope, $scope, $http, $location, searchbloxService, searchbloxFactory, facetFactory, $q, $timeout, $sce) {// 'autoCompleteFactory',
 
-          /*  var searchUrl = rootUrl+'/searchblox/servlet/SearchServlet';
+            var searchUrl = rootUrl+'/searchblox/servlet/SearchServlet';
             var autoSuggestUrl = rootUrl+'/searchblox/servlet/AutoSuggest';
-            var reportServletUrl = rootUrl+'/searchblox/servlet/ReportServlet'; */ //used for localserver
+            var reportServletUrl = rootUrl+'/searchblox/servlet/ReportServlet';  //used for localserver
 
-            var searchUrl = '/searchblox/servlet/SearchServlet';
+          /*  var searchUrl = '/searchblox/servlet/SearchServlet';
             var autoSuggestUrl = '/searchblox/servlet/AutoSuggest';
-            var reportServletUrl = '/searchblox/servlet/ReportServlet';
+            var reportServletUrl = '/searchblox/servlet/ReportServlet';*/
 
             // Hard coded these values. This needs to be dynamic
             //var facet = 'on';
@@ -51,6 +51,7 @@ angular.module('searchblox.controller', [])
             $scope.showUptoColFilterCountFlag = false; //COUNT TO SHOW THE NUMBER OF COLLECTION FILTERS
             $scope.showFilters = true; //Toggle filters
             $scope.playVideo = false; // FOR VIDEO RESULTS PLAY ICON
+            $scope.customdatefilter = false; //TO DISPLAY THE CUSTOM DATES FOR DATE FILTER
 
 
             // load autosuggest items
@@ -106,13 +107,13 @@ angular.module('searchblox.controller', [])
 
                         if (typeof($scope.dataMap['startDate']) == "undefined" || $scope.dataMap['startDate'] == null) {
                             if ((data.startDate !== undefined) && data.startDate !== null) {
-                                $scope.dataMap['startDate'] = moment(data.startDate, 'MM-DD-YYYY').format("YYYYMMDDHHmmss");
+                                $scope.dataMap['startDate'] = moment(data.startDate, 'MM-DD-YYYY').format("YYYY-MM-DD");
                             }
                         }
 
                         if (typeof($scope.dataMap['endDate']) == "undefined" || $scope.dataMap['endDate'] == null) {
                             if ((data.endDate !== undefined) && data.endDate !== null) {
-                                $scope.dataMap['endDate'] = moment(data.endDate, 'MM-DD-YYYY').format("YYYYMMDDHHmmss");
+                                $scope.dataMap['endDate'] = moment(data.endDate, 'MM-DD-YYYY').format("YYYY-MM-DD"); //YYYYMMDDHHmmss
                             }
                         }
 
@@ -137,6 +138,7 @@ angular.module('searchblox.controller', [])
             }
             // Search function
             $scope.doSearch = function () {
+              console.log("doSearch");
                 $scope.dataMap['mlt'] = false;
                 $scope.currentPage = $scope.page;
                 var urlParams = searchbloxService.getUrlParams(searchUrl, $scope.query,
@@ -144,13 +146,31 @@ angular.module('searchblox.controller', [])
                 searchbloxFactory.getResponseData(urlParams).then(function (searchResults) {
                     $scope.parsedSearchResults = searchbloxService.parseResults(searchResults.data, $scope.facetMap, $scope.dataMap);
                     $scope.dataMap['collections'] = $scope.parsedSearchResults['collections'].slice();
-                    console.log($scope.parsedSearchResults);
                     //$scope.parsedLinks = searchbloxService.parseLinks(searchResults.data, $scope.facetMap);
                     // $scope.getTopClicked();
                     //$scope.getTagCloud();
                     $scope.startedSearch = true;
                     $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
                     $scope.displayPageNo();
+
+                    /* ================================================================ */
+/*var options = {
+    dateFormat: 'yy-mm-dd',
+    onSelect: function () {
+      console.log(this.value);
+      if(this.id == 'custom_start'){
+        $scope.customstart = this.value;
+      }
+      if(this.id == 'custom_end'){
+        $scope.customend = this.value;
+      }
+    }
+};
+
+                    $scope.customstart = Date.now();
+                    $scope.customend = Date.now();
+                     jQuery(".datepicker").datepicker(options);
+                    /* ================================================================ */
                 });
             }
 
@@ -258,7 +278,6 @@ angular.module('searchblox.controller', [])
             // Function for search by filter.
             $scope.doSearchByFilter = function (filter, facetName, rSlider) {
                 $scope.page = 1;
-
                 var filters = "",
                     filterName = filter['@name'],
                     filterRangeFrom = filter['@from'],
@@ -465,4 +484,8 @@ angular.module('searchblox.controller', [])
                 return false;
               }
             };
+
+            $scope.togglecustomdatefilter = function(){
+              $scope.customdatefilter = !$scope.customdatefilter;
+            }
 }]);

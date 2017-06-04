@@ -39,6 +39,10 @@ body{
   padding: 0px;
 }
 
+.margin-5{
+  margin: 5px;
+}
+
 .word-break-filter{
   word-break: break-word;
 }

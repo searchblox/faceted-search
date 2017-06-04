@@ -82,11 +82,18 @@
   			                        </span>
   			                    </li>
                           </span>
+                          <span ng-show="facet['display'] == 'Date'">
+                            <li>
+                              <span class="font-color filter-options" ng-click="togglecustomdatefilter()">&nbspcustom</span>
+                            </li>
+                          </span>
   			                </ul>
 										</div>
 									</div>
 								</div>
 	            </div>
+
+             <date-picker do-search-by-filter="doSearchByFilter(filter, field)" ng-show="customdatefilter"> </date-picker>
 
             <div>
                 <span ng-show="parsedSearchResults.found > 0"><div ng-bind-html="tagHtml"></div></span>
