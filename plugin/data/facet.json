@@ -12,7 +12,7 @@
             {"name":"1MB to 10MB","from":"1048576","to":"10485760"},
             {"name":"10MB &gt","from":"10485760","to":"*"}
         ]},
-        {"field": "lastmodified","display":"Modified Date",
+        {"field": "lastmodified","display":"Date",
             "dateRange":[
                 {"name":"Last 24 hours","calendar":"days","value":"1"},
                 {"name":"Past Week","calendar":"days","value":"7"},
@@ -23,8 +23,8 @@
     "collection":[],
     "collectionForAds":[],
     "sortBtns":[
-		{"field":"alpha","display":"Alphabetic"},
 		{"field":"date","display":"Date"},
+		{"field":"alpha","display":"Alphabetic"},
 		{"field":"relevance","display":"Relevance"}
     ],
     "matchAny":"off",
@@ -32,4 +32,3 @@
     "pageSize": "10",
     "showAutoSuggest": "true"
 }
-

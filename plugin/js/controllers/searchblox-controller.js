@@ -2,10 +2,17 @@
  * Created by cselvaraj on 4/29/14.
  */
 'use strict';
+//var rootUrl = "http://185.73.37.206:8080";
+//var rootUrl = "http://92.222.88.95:8080";
+//var rootUrl = "http://localhost:8080";
 // CONTROLLER
 angular.module('searchblox.controller', [])
     .controller('searchbloxController', ['$rootScope', '$scope', '$http', '$location', 'searchbloxService', 'searchbloxFactory', 'facetFactory', '$q', '$timeout', '$sce',
         function ($rootScope, $scope, $http, $location, searchbloxService, searchbloxFactory, facetFactory, $q, $timeout, $sce) {// 'autoCompleteFactory',
+
+          /*  var searchUrl = rootUrl+'/searchblox/servlet/SearchServlet';
+            var autoSuggestUrl = rootUrl+'/searchblox/servlet/AutoSuggest';
+            var reportServletUrl = rootUrl+'/searchblox/servlet/ReportServlet';  *///used for localserver
 
             var searchUrl = '/searchblox/servlet/SearchServlet';
             var autoSuggestUrl = '/searchblox/servlet/AutoSuggest';
@@ -24,6 +31,7 @@ angular.module('searchblox.controller', [])
             // $scope.sortVal = "";
             $scope.from = 0;
             $scope.page = 1;
+            $scope.currentPage = 1; //I: To track current page
             $scope.prevPage = 1;
             //$scope.pageSize = 10;
             $scope.noOfSuggests = 5;
@@ -37,7 +45,14 @@ angular.module('searchblox.controller', [])
             $scope.maxAdsLimit = 2;
             $scope.dataMap = new Object();
             $scope.inputClass = {};
-            $scope.inputClass.name = "ngCustomInput col-sm-8 col-md-8 col-md-offset-2";
+            $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
+
+            $scope.removeAds = false; //TO HIDE ADS IF TRUE
+            $scope.showUptoColFilterCountFlag = false; //COUNT TO SHOW THE NUMBER OF COLLECTION FILTERS
+            $scope.showFilters = true; //Toggle filters
+            $scope.playVideo = false; // FOR VIDEO RESULTS PLAY ICON
+            $scope.customdatefilter = false; //TO DISPLAY THE CUSTOM DATES FOR DATE FILTER
+
 
             // load autosuggest items
             $scope.loadItems = function (term) {
@@ -92,13 +107,13 @@ angular.module('searchblox.controller', [])
 
                         if (typeof($scope.dataMap['startDate']) == "undefined" || $scope.dataMap['startDate'] == null) {
                             if ((data.startDate !== undefined) && data.startDate !== null) {
-                                $scope.dataMap['startDate'] = moment(data.startDate, 'MM-DD-YYYY').format("YYYYMMDDHHmmss");
+                                $scope.dataMap['startDate'] = moment(data.startDate, 'MM-DD-YYYY').format("YYYY-MM-DD");
                             }
                         }
 
                         if (typeof($scope.dataMap['endDate']) == "undefined" || $scope.dataMap['endDate'] == null) {
                             if ((data.endDate !== undefined) && data.endDate !== null) {
-                                $scope.dataMap['endDate'] = moment(data.endDate, 'MM-DD-YYYY').format("YYYYMMDDHHmmss");
+                                $scope.dataMap['endDate'] = moment(data.endDate, 'MM-DD-YYYY').format("YYYY-MM-DD"); //YYYYMMDDHHmmss
                             }
                         }
 
@@ -109,10 +124,11 @@ angular.module('searchblox.controller', [])
 
                         $scope.dataMap['facet'] = 'on';
                         $scope.dataMap['xsl'] = "json";
-
                     }
                 });
             }
+
+
 
             $scope.startSearch = function(){
                 $scope.from = 0;
@@ -122,17 +138,62 @@ angular.module('searchblox.controller', [])
             }
             // Search function
             $scope.doSearch = function () {
-
+              console.log("doSearch");
+                $scope.dataMap['mlt'] = false;
+                $scope.currentPage = $scope.page;
                 var urlParams = searchbloxService.getUrlParams(searchUrl, $scope.query,
                     $scope.rangeFilter, $scope.filterFields, $scope.page, $scope.dataMap);
                 searchbloxFactory.getResponseData(urlParams).then(function (searchResults) {
                     $scope.parsedSearchResults = searchbloxService.parseResults(searchResults.data, $scope.facetMap, $scope.dataMap);
-                    $scope.parsedLinks = searchbloxService.parseLinks(searchResults.data, $scope.facetMap);
+                    $scope.dataMap['collections'] = $scope.parsedSearchResults['collections'].slice();
+                    //$scope.parsedLinks = searchbloxService.parseLinks(searchResults.data, $scope.facetMap);
                     // $scope.getTopClicked();
                     //$scope.getTagCloud();
                     $scope.startedSearch = true;
-                    $scope.inputClass.name = "ngCustomInput col-sm-6 col-md-6 col-md-offset-2";
+                    $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
+                    $scope.displayPageNo();
+
+                    /* ================================================================ */
+/*var options = {
+    dateFormat: 'yy-mm-dd',
+    onSelect: function () {
+      console.log(this.value);
+      if(this.id == 'custom_start'){
+        $scope.customstart = this.value;
+      }
+      if(this.id == 'custom_end'){
+        $scope.customend = this.value;
+      }
+    }
+};
+
+                    $scope.customstart = Date.now();
+                    $scope.customend = Date.now();
+                     jQuery(".datepicker").datepicker(options);
+                    /* ================================================================ */
                 });
+            }
+
+            $scope.doMltSearch = function (mltId, mltCol, page) {
+                $scope.dataMap['mlt'] = true;
+                $scope.mltId = mltId;
+                $scope.mltCol = mltCol;
+                $scope.currentPage = page;
+                $scope.page = page;
+                var urlParams = searchUrl + "?xsl=json&mlt_col=" + mltCol + "&mlt_id=" + mltId + "&XPC=" + page;
+                searchbloxFactory.getResponseData(urlParams).then(function (searchResults) {
+                  searchResults.data.results['@query'] = $scope.parsedSearchResults.query;
+                    $scope.parsedSearchResults = searchbloxService.parseResults(searchResults.data, $scope.facetMap, $scope.dataMap);
+                    $scope.startedSearch = true;
+                    $scope.inputClass.name = "ngCustomInput col-sm-12 col-md-8 col-md-offset-2";
+                    $scope.displayPageNo();
+                });
+            }
+
+            // COLLECTION CHECKBOXES TO SELECT MULTIPLE COLLECTIONS
+            $scope.checkToggle = function(collection){
+              collection['checked'] == "true"?(collection['checked'] = "false"):(collection['checked'] = "true");
+              $scope.doSearch();
             }
 
             // Sort function
@@ -186,28 +247,37 @@ angular.module('searchblox.controller', [])
 
             // adjust how many results are shown
             $scope.howmany = function () {
-                var newhowmany = prompt('Currently displaying ' + $scope.pageSize + ' results per page. How many would you like instead?');
-                if (newhowmany) {
-                    $scope.pageSize = parseInt(newhowmany);
+                var newhowmany = prompt('Currently displaying ' + $scope.dataMap['pageSize'] + ' results per page. How many would you like instead?');
+                if (newhowmany > 0) {
+                    $scope.dataMap['pageSize'] = parseInt(newhowmany);
                     $scope.from = 0;
-                    $scope.dosearch();
+                    $scope.doSearch();
                 }
             }
 
             // adjust how many suggestions are shown
-            var howmanynofsuggest = function () {
+            $scope.howmanynofsuggest = function () {
                 var newhowmany = prompt('Currently displaying ' + $scope.noOfSuggests + ' suggestions per page. How many would you like instead?');
-                if (newhowmany) {
+                if (newhowmany > 0) {
                     $scope.noOfSuggests = parseInt(newhowmany);
                     $scope.from = 0;
-                    $scope.dosearch();
+                    $scope.doSearch();
                 }
             };
 
+            //TO CHANGE THE NUMBER OF VALUES TO BE DISPLAYED FOR COLLECTION FILTERS
+            $scope.colFilterCountChange = function(coltype){
+              var oldhowmany = $scope.facetMap[coltype].size;
+              var newhowmany = prompt('Currently displaying ' + $scope.facetMap[coltype].size + '. How many would you like instead?');
+              if (newhowmany > 0) {
+                $scope.facetMap[coltype].size = parseInt(newhowmany);
+                $scope.dataMap['facetFields'] = $scope.dataMap['facetFields'].replace("f."+coltype+".size="+oldhowmany, "f."+coltype+".size="+newhowmany);
+                $scope.doSearch();
+              }
+            }
             // Function for search by filter.
             $scope.doSearchByFilter = function (filter, facetName, rSlider) {
                 $scope.page = 1;
-
                 var filters = "",
                     filterName = filter['@name'],
                     filterRangeFrom = filter['@from'],
@@ -322,11 +392,43 @@ angular.module('searchblox.controller', [])
                 $scope.doSearch();
             }
 
-            // Function for fetch page results.
+            /* CLEAR ALL FILTERS APPLIED */
+            $scope.clearAllFilters = function(){
+              $scope.selectedItems = [];
+              $scope.filterFields = undefined;
+              $scope.doSearch();
+            }
+
+            // Function for fetch page results. on clicking pagination button
             $scope.fetchPage = function (pageNo) {
                 $scope.page = pageNo;
                 $scope.prevPage = pageNo;
-                $scope.doSearch();
+                ($scope.dataMap['mlt'] == true)?$scope.doMltSearch($scope.mltId, $scope.mltCol, $scope.page):$scope.doSearch();
+            }
+
+            $scope.displayPageNo = function(){
+              var noOfPages = Math.ceil($scope.parsedSearchResults.found / $scope.dataMap['pageSize']);
+              $scope.displayPageNoObj = {
+                              	pageNoDisplay : 1,
+                              	prev : 1,
+                              	next : 6,
+                                noOfPages : noOfPages
+                              }
+              var pageSet = Math.ceil(($scope.currentPage)/5);
+              $scope.displayPageNoObj.pageNoDisplay = ((pageSet - 1)*5 + 1);
+              if(pageSet == 1){
+                $scope.displayPageNoObj.prev = 1;
+              }
+              else{
+                $scope.displayPageNoObj.prev = ((pageSet - 2)*5 + 1);
+              }
+              if(pageSet == Math.ceil(noOfPages / 5)){
+                $scope.displayPageNoObj.next = noOfPages;
+              }
+              else{
+                $scope.displayPageNoObj.next = (pageSet*5 + 1);
+              }
+
             }
 
             // check if there is atleast one filter in the facet
@@ -369,5 +471,21 @@ angular.module('searchblox.controller', [])
                     }
                 }
                 return false;
+            }
+
+            $scope.mltShow = function(uid, url, type){
+              if(uid != url){
+                return true;
+              }
+              else if(uid == url && type == 'HTML'){
+                return true;
+              }
+              else{
+                return false;
+              }
+            };
+
+            $scope.togglecustomdatefilter = function(){
+              $scope.customdatefilter = !$scope.customdatefilter;
             }
 }]);

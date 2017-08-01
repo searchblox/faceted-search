@@ -20,6 +20,7 @@ angular.module('searchbloxModule', [
     'searchblox.controller',
     'searchblox.custominput',
     'searchblox.autocomplete',
+    'searchblox.date',
     'searchblox.factory',
     'searchblox.trust',
     'searchblox.service',

@@ -1,63 +1,99 @@
 <div class="container-fluid app-font">
-	<div class="row">
-        <div id="sort_btn_aligner" ng-show="parsedSearchResults.found > 0" style="margin-top:40px;margin-bottom:50px;">
-            <div class="btn-group btn-group-{{type}} col-sm-6 col-md-6 col-md-offset-2" data-toggle="buttons">
-                <label class="btn btn-warning disabled btn-sm">Sort By :</label>
-                <label  ng-repeat="sortBtn in sortBtns" class="btn btn-primary btn-sm" data-ng-click="doSort(sortBtn['sortVal'])">
-                    {{sortBtn['display']}}
-                    <input type="radio"></label>
-                </label>
-                <label ng-switch on="dataMap['sortDir']" class="btn btn-info btn-sm">
-                    <div ng-switch-when="asc">
-                        <div id="direction" dir="asc" data-ng-click="doDirector('desc')">
-                            <span class="glyphicon glyphicon-arrow-up"></span>
-                        </div>
+    <div class="row">
+      <!-- FILTERS ON LEFT PANE -->
+        <div class="col-sm-12 col-md-3 margin-top-1"  ng-if="parsedSearchResults.query">
+						<!-- FILTER BY    RESULTS FOUND HEADER -->
+            <div class="colorBg col-sm-12 filter-by">
+							<span>Filter By</span>
+							<span class="pull-right results-found">{{parsedSearchResults.found}} Results Found</span>
+						</div>
+
+            <div class="col-sm-12 padding-10">
+              <div class="col-sm-6">
+                <a href data-ng-click="clearAllFilters()"> Clear Filter</a>
+              </div>
+              <div class="col-sm-6">
+                <a href  data-toggle="modal" data-target="#alert-modal"> Create Alert </a>
+              </div>
+            </div>
+
+						<div class="col-sm-12">
+							<div class="row">
+		            <div ng-repeat="item in selectedItems" slide-show="showInput">
+		                <a id="item['id']" href="javascript:void(0)" data-ng-click="removeItem($index)" class="btn btn-info pull-left filter-selected">
+		                    <!-- <span ng-bind-html="item['filterName'] | trust"></span> -->{{item['filterName'] | trust}}
+		                    <i class="glyphicon glyphicon-remove"></i>
+		                </a>
+		            </div>
+							</div>
+						</div>
+
+	       <!--     <div ng-repeat="facet in parsedSearchResults.facets" ng-if="facetMap[facet['name']]['display']" ng-hide="facetMap[facet['name']]['display'] == 'Size'">
+								<div class="col-sm-12">
+									<div class="col-sm-12 padding-10">
+										<div class="row">
+			                <span class="font-color filter-type" ng-click="showFilters = !showFilters"><span ng-hide="showFilters">+ </span>{{facetMap[facet['name']]['display']}}</span>
+											<span class="glyphicon glyphicon-chevron-down pull-right font-color chevron-down-icon" ng-click="showUptoColFilterCountFlag = !showUptoColFilterCountFlag" ng-hide="facet['name'] == 'lastmodified'"></span>
+										</div>
+                    <div class="col-sm-10 showUptoColFilterCount padding-10" ng-click="colFilterCountChange(facet['name']);showUptoColFilterCountFlag = !showUptoColFilterCountFlag;" ng-show="showUptoColFilterCountFlag">
+                      <div>show upto {{facetMap[facet['name']].size}}</div>
                     </div>
-                    <div ng-switch-default>
-                        <div id="direction" dir="desc" data-ng-click="doDirector('asc')">
-                            <span class="glyphicon glyphicon-arrow-down"></span>
-                        </div>
+									</div>
+
+									<div class="col-sm-12" ng-show="showFilters">
+										<div class="row">
+                      <div class="row">
+  			                <ul>
+  			                    <li ng-repeat="filter in facet[facet['name']][1]" class="padding-5">
+  			                        <span data-ng-click="doSearchByFilter(filter, facet['name'])" ng-show="filter['@name']" class="font-color filter-options">
+  			                            <span ng-bind-html="filter['@name'] | trust" forcloudrel="{{filter['#text']}}"
+  			                                  forcloudtag="{{filter['@name']}}" class="facetText word-break-filter"></span>
+  			                            ({{filter["#text"]}})
+  			                        </span>
+  			                    </li>
+  			                </ul>
+                      </div>
+										</div>
+									</div>
+								</div>
+	            </div> -->
+
+              <div ng-repeat="facet in facetMap" ng-hide="facet['display'] == 'Size'">
+								<div class="col-sm-12">
+									<div class="col-sm-12 padding-10">
+										<div class="row">
+			                <span class="font-color filter-type col-sm-7" ng-click="showFilters = !showFilters"><span ng-hide="showFilters">+ </span>{{facet['display']}}</span>
+											<span class="glyphicon glyphicon-chevron-down font-color chevron-down-icon" ng-click="showUptoColFilterCountFlag = !showUptoColFilterCountFlag" ng-hide="facet['field'] == 'lastmodified'"></span>
+										</div>
+                    <div class="col-sm-10 showUptoColFilterCount padding-10" ng-click="colFilterCountChange(facet['field']);showUptoColFilterCountFlag = !showUptoColFilterCountFlag;" ng-show="showUptoColFilterCountFlag">
+                      <div>show upto {{facet.size}}</div>
                     </div>
-                </label>
-            </div>
-        </div>
-    </div>
+									</div>
 
-    <div class="row" style="margin-top:20px;">
-        <div class="col-sm-2 col-md-2 sidebar left-nav colorBg" ng-show="hasFacets()">
-        	<span>
-                <br><br>
-                <div ng-bind="parsedSearchResults.found + ' results found'"></div>
-        	</span>
+                  <div class="col-sm-12" ng-show="showFilters">
+										<div class="row">
+  			                <ul>
+                          <span ng-repeat="facetResult in parsedSearchResults.facets">
+  			                    <li ng-repeat="filter in facetResult[facet['field']][1]" class="padding-5">
+  			                        <span data-ng-click="doSearchByFilter(filter, facet['field'])" ng-show="filter['@name']" class="font-color filter-options">
+  			                            <span ng-bind-html="filter['@name'] | trust" forcloudrel="{{filter['#text']}}"
+  			                                  forcloudtag="{{filter['@name']}}" class="facetText word-break-filter"></span>
+  			                            ({{filter["#text"]}})
+  			                        </span>
+  			                    </li>
+                          </span>
+                          <span ng-show="facet['display'] == 'Date'">
+                            <li>
+                              <span class="font-color filter-options" ng-click="togglecustomdatefilter()">&nbspcustom</span>
+                            </li>
+                          </span>
+  			                </ul>
+										</div>
+									</div>
+								</div>
+	            </div>
 
-            <div class="col-lg-12" ng-repeat="item in selectedItems" slide-show="showInput">
-                <a id="item['id']" href="javascript:void(0)" data-ng-click="removeItem($index)" class="btn btn-primary btn-xs col-lg-9 button-wrap">
-                    <span ng-bind-html="item['filterName'] | trust"></span>
-                    <i class="glyphicon glyphicon-remove"></i>
-                </a>
-            </div>
-
-			<span>
-            <div ng-repeat="facet in parsedSearchResults.facets" ng-if="parsedSearchResults.records.length">
-                <h5 style="font-weight: bold" ng-bind="facetMap[facet['name']]['display']"></h5>
-                <rw-slider
-                        range="true"
-                        ng-if="facetMap[facet['name']]['slider']"
-                        values="[0, 0]"
-                        search-name="facet['name']"
-                        search-data="facetMap[facet['name']]['range']"
-                ></rw-slider>
-                <ul>
-                    <li ng-repeat="filter in facet[facet['name']][1]">
-                        <a href data-ng-click="doSearchByFilter(filter, facet['name'])" ng-show="filter['@name']">
-                            <span ng-bind-html="filter['@name'] | trust" forcloudrel="{{filter['#text']}}"
-                                  forcloudtag="{{filter['@name']}}" class="facetText"></span>
-                            ({{filter["#text"]}})
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            </span>
+             <date-picker do-search-by-filter="doSearchByFilter(filter, field)" ng-show="customdatefilter"> </date-picker>
 
             <div>
                 <span ng-show="parsedSearchResults.found > 0"><div ng-bind-html="tagHtml"></div></span>
@@ -69,37 +105,90 @@
 
         </div>
 
-
-        <div class="col-sm-8 col-md-8 col-md-offset-0 main">
-           <div class="row-fluid main-section" ng-show="hasInitAds()">
-                <div class="col-fluid" ng-repeat="advertisement in parsedSearchResults.ads.slice(0,2) track by advertisement['@no']" ng-class="'ads-style'">
-                    <ads-item  adv="advertisement">
-                    </ads-item>
-                </div>
-            </div>
-            <div class="row-fluid main-section">
-                    <div class="col-fluid" ng-repeat="result  in parsedSearchResults.records track by result['@no']" ng-class-odd="'odd'" ng-class-even="'even'">
-                         <content-item  content="result">
-                          </content-item>
-                   </div>
-            </div>
-
-          <div class="row-fluid main-section">
-                <ul class="pagination">
-                    <li ng-class="{active:lnk['pageNo'] == page}"
-                        ng-repeat="lnk in parsedLinks.pages track by lnk['pageName']">
-                        <a href data-ng-click="fetchPage(lnk['pageNo'])"
-                           ng-show="lnk['pageName']">{{lnk["pageName"]}}</a>
+				<!-- RIGHT SIDE PANE - SEARCH RESULTS -->
+        <div class="col-sm-12 col-md-9 main margin-top-1">
+					<!-- SEARCH RESULTS FOR * -->
+					<div class="row-fluid search-results-for" ng-if="parsedSearchResults.query">
+						<span>Search Results for {{parsedSearchResults.query}}</span>
+					</div>
+          <div class="col-sm-12">
+            <div class="row">
+    					<!-- SORTING -->
+    					<div id="sort_btn_aligner" ng-show="parsedSearchResults.found > 0" class="col-sm-4 pull-left sort-align">
+                  <a  href="" ng-repeat="sortBtn in sortBtns"  data-ng-click="doSort(sortBtn['sortVal'])">
+                      <span ng-if="sortBtn['sortVal'] == 'date'">Sort by Date</span>
+                  </a>
+                  <a  href="" ng-repeat="sortBtn in sortBtns"  data-ng-click="doSort(sortBtn['sortVal'])">
+                      <span ng-if="sortBtn['sortVal'] == 'alpha'">Sort Alphabetically</span>
+                  </a>
+    	        </div>
+    					<!-- PAGINATION -->
+              <div class="row-fluid main-section col-sm-8 pull-right" ng-show="displayPageNoObj.noOfPages">
+                <ul class="pagination pull-right">
+                    <li>
+                        <a href data-ng-click="fetchPage(displayPageNoObj.prev)">
+                          <span>«</span>
+                        </a>
+                    </li>
+                    <li ng-class="{active:displayPageNoObj.pageNoDisplay + lnk == page}" ng-repeat="lnk in [0,1,2,3,4]">
+                        <a href data-ng-click="fetchPage(displayPageNoObj.pageNoDisplay + lnk)" ng-if="displayPageNoObj.pageNoDisplay + lnk <= displayPageNoObj.noOfPages">
+    											<span>{{displayPageNoObj.pageNoDisplay + lnk}}</span>
+    										</a>
+                    </li>
+                    <li>
+                        <a href data-ng-click="fetchPage(displayPageNoObj.next)">
+    											<span>»</span>
+    										</a>
                     </li>
                 </ul>
+              </div>
+            </div>
+          </div>
+					<!-- ADVERTISEMENT SECTION -->
+            <div class="col-sm-12 main-section" ng-show="hasInitAds()">
+              <div class="row">
+                  <div class="col-fluid alert alert-warning" ng-repeat="advertisement in parsedSearchResults.ads.slice(0,2) track by advertisement['@no']" ng-class="'ads-style'" ng-hide="removeAds">
+                      <ads-item  adv="advertisement" remove-ads="removeAds">
+                      </ads-item>
+                  </div>
+              </div>
+            </div>
+						<!-- RESULTS SECTION -->
+            <div class="row-fluid main-section">
+                  <div class="col-fluid" ng-repeat="result  in parsedSearchResults.records track by result['@no']" >
+                         <content-item  content="result" do-mlt-search="doMltSearch(mltId, mltCol, page)" mlt-show="mltShow(uid, url, type)">
+                          </content-item>
+                   </div>
+            </di v>
+            <!-- PAGINATION -->
+            <div class="row-fluid main-section col-sm-8 pull-right" ng-show="displayPageNoObj.noOfPages">
+              <ul class="pagination pull-right">
+                  <li>
+                      <a href data-ng-click="fetchPage(displayPageNoObj.prev)">
+                        <span>«</span>
+                      </a>
+                  </li>
+                  <li ng-class="{active:displayPageNoObj.pageNoDisplay + lnk == page}" ng-repeat="lnk in [0,1,2,3,4]">
+                      <a href data-ng-click="fetchPage(displayPageNoObj.pageNoDisplay + lnk)" ng-if="displayPageNoObj.pageNoDisplay + lnk <= displayPageNoObj.noOfPages">
+                        <span>{{displayPageNoObj.pageNoDisplay + lnk}}</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href data-ng-click="fetchPage(displayPageNoObj.next)">
+                        <span>»</span>
+                      </a>
+                  </li>
+              </ul>
             </div>
 
             <div class="container" ng-show="usersCount == 0">
                 <h3>No Users Found</h3>
             </div>
 
-            <div class="row-fluid"  ng-show="startedSearch">
+            <div class="row-fluid margin-top-1 padding-10"  ng-show="startedSearch">
         			<span   ng-show="(parsedSearchResults.found <= 0 )">
+                <i ng-if="parsedSearchResults.suggest">Did you mean: <b>{{parsedSearchResults.suggest}}</b> ? </i>
+                <br><br>
         				Your search for<b> {{query}} </b>did not match any documents...
             			<br/><br/>
             		* Suggestions: Make sure all words are spelled correctly.</br>
@@ -118,4 +207,5 @@
 
         </div>
     </div>
+  </div>
 </div>

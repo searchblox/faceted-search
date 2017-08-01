@@ -32,32 +32,37 @@ angular.module('searchblox.custominput',[])
 
     return {
         restrict: 'A,E',
-        scope: { searchParam: '=ngModel', onsearch: '=', inputstyle:"=inputstyle"},
+        scope: { searchParam: '=', onsearch: '=', inputstyle:"=inputstyle", howmany: "&",howmanynofsuggest: "&", showAutoSuggest: "="},
         replace: false,
         transclude: true,
-        template: '<div class="{{inputstyle.name}}">' +
-            ' <div class="input-group input-group-sm">' +
-            '    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>' +
-            '    <input class="form-control" type="text"' +
-            '           placeholder="search term"' +
-            '           ng-model="searchParam"' +
-            '           ng-change="newTagChange()">' +
-            '    <span class="input-group-btn">' +
-            '    <a data-toggle="dropdown" class="btn btn-primary dropdown-toggle" href="#">' +
-            '        <i class="glyphicon glyphicon-cog"></i>' +
-            '        <span class="caret"></span></a>' +
-            '    <ul class="dropdown-menu">' +
-            '        <li><a href data-ng-click="partialMatch()" >partial match</a></li>' +
-            '        <li><a href data-ng-click="exactMatch()">exact match</a></li>' +
-            '        <li><a href data-ng-click="fuzzyMatch()">fuzzy match</a></li>' +
-            '        <li><a href data-ng-click="matchAll()">match all</a></li>' +
-            '    </ul>' +
-            '</span>' +
-            ' </div>' +
+        template: '<div class="{{inputstyle.name}}"> <br>' +
+            '         <div class="input-group input-group-lg">' +
+            '            <input type="text" class="form-control border-radius-0 input-search" placeholder="Search Term" ng-model="searchParam" ng-change="newTagChange() " autofocus/>' +
+            '             <div class="input-group-addon settings-image"> <span>' +
+            '               <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <img ng-src="images/settings.png"/>' +
+              '               <ul class="dropdown-menu settings-dropdown">' +
+              '                 <li><a href data-ng-click="partialMatch()" >partial match</a></li>' +
+              '                 <li><a href data-ng-click="exactMatch()">exact match</a></li>' +
+              '                 <li><a href data-ng-click="fuzzyMatch()">fuzzy match</a></li>' +
+              '                 <li><a href data-ng-click="matchAll()">match all</a></li>' +
+              '                 <li style="border-bottom:1px solid rgba(0, 0, 0, 0.2)"></li>' +
+              '                 <li><a href data-ng-click="showAutoSuggest = !showAutoSuggest"><i class="fa fa-check" aria-hidden="true" ng-show="showAutoSuggest"></i>Autosuggest</a></li>' +
+              '                 <li style="border-bottom:1px solid rgba(0, 0, 0, 0.2)"></li>' +
+              '                 <li><a href="https://www.searchblox.com" target="_blank">Learn more</a></li>' +
+              '                 <li style="border-bottom:1px solid rgba(0, 0, 0, 0.2)"></li>' +
+              '                 <li><a href data-ng-click="howmany()">Results per page</a></li>' +
+              '                 <li><a href data-ng-click="howmanynofsuggest()">Suggestions per page</a></li>' +
+              '               </ul>' +
+            '               </a>' +
+            '              </span> </div>' +
+            '            <div class="input-group-btn"> '+
+            '               <button type="button" class="btn btn-primary border-radius-0" ng-click="onsearch()"><i class="fa fa-search"></i></button>' +
+            '            </div>' +
+            '         </div>' +
             '<div ng-transclude></div>' +
             '</div>',
         controller: ["$scope", "$attrs", "$element", function ($scope, $attrs, $element) {
-
+            var self = this;
             loadOptions($scope, $attrs);
             // do search options
             $scope.partialMatch = function () {
@@ -73,8 +78,7 @@ angular.module('searchblox.custominput',[])
                     }
                 }
                 $scope.searchParam = newstring;
-                $scope.onsearch();
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
 
             $scope.fuzzyMatch = function () {
@@ -90,9 +94,9 @@ angular.module('searchblox.custominput',[])
                     }
                 }
                 $scope.searchParam = newstring;
-                $scope.onsearch();
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
+
             $scope.exactMatch = function () {
                 var newvals = $scope.searchParam.replace(/"/gi, '').replace(/\*/gi, '').replace(/\~/gi, '').split(' ');
                 var newstring = "";
@@ -107,22 +111,20 @@ angular.module('searchblox.custominput',[])
                 }
                 $.trim(newstring, ' ');
                 $scope.searchParam = "\"" + newstring + "\"";
-                $scope.onsearch();
-
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
+
             $scope.matchAll = function () {
                 $scope.searchParam = $.trim($scope.searchParam.replace(/ OR /gi, ' '));
                 $scope.searchParam = ($scope.searchParam.replace(/ /gi, ' AND '));
-                $scope.doSearch();
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
+
             $scope.matchAny = function () {
                 $scope.searchParam = $.trim($scope.searchParam.replace(/ AND /gi, ' '));
                 $scope.searchParam = $scope.searchParam.replace(/ /gi, ' OR ');
                 $scope.searchParam.focus().trigger('keyup');
-                $scope.onsearch();
-
+                self.getNewTagInput().changeValue($scope.searchParam);
             }
 
             $scope.newTagChange = angular.noop;
@@ -131,6 +133,7 @@ angular.module('searchblox.custominput',[])
                 var input = $element.find('input');
                 input.changeValue = function (value) {
                     $scope.searchParam = value;
+                    $scope.onsearch();
                 };
 
                 input.change = function (handler) {
@@ -141,6 +144,14 @@ angular.module('searchblox.custominput',[])
 
                 return input;
             };
+
+            $scope.$watch('searchParam', function(){
+              setTimeout(function(){
+                self.getNewTagInput().changeValue($scope.searchParam);
+              }, 500);
+            });
+
+
         }],
 
         link: function (scope, element) {
@@ -157,8 +168,6 @@ angular.module('searchblox.custominput',[])
                 key = e.keyCode;
                 if (key === KEYS.enter && scope.options.addOnEnter) {
                     scope.onsearch();
-
-
                 }
             });
             element.find('div').bind('click', function () {

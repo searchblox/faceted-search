@@ -22,20 +22,24 @@ angular.module('searchblox.service', [])
             var fields = "";
             var values = new Object();
             var urlParam = "";
+
             for (var i in facets) {
 
                 fields = fields + '&facet.field=' + facets[i].field;
+
+                values[facets[i].field] = {};
+                values[facets[i].field]["field"] = facets[i].field;
+                values[facets[i].field]["display"] = facets[i].display;
+
                 if (facets[i].size !== undefined && facets[i].size !== null) {
                     fields = fields + '&f.' + facets[i].field + '.size=' + facets[i].size;
+                    values[facets[i].field]["size"] = facets[i].size;
                 }
-                
-                values[facets[i].field] = {};
-                values[facets[i].field]["display"] = facets[i].display;
-                
+
                 if (facets[i].slider) {
                     values[facets[i].field]["slider"] = facets[i].slider;
                 }
-                
+
                 if (facets[i].range !== undefined && facets[i].range !== null) {
                     for (var r in facets[i].range) {
                         urlParam = urlParam + '&f.' + facets[i].field + '.range=[' + facets[i].range[r]["from"] + 'TO' + facets[i].range[r]["to"] + ']';
@@ -82,7 +86,6 @@ angular.module('searchblox.service', [])
             //var values = new Array();
             var collectionString = "";
             for (var i in collection) {
-                console.log(i);
                 //  values.push(collection[i]);
                 collectionString = collectionString + '&col=' + collection[i];
             }
@@ -134,8 +137,22 @@ angular.module('searchblox.service', [])
                 urlParam = urlParam + "&sort=" + dataMap['sortVal'];
             }
 
+            if(typeof( dataMap['mlt']) !== "undefined" && dataMap['mlt'] !== null && !isBlank(dataMap['mlt'])){
+              if (typeof( dataMap['mlt'].mltId) !== "undefined" && dataMap['mlt'].mltId !== null && !isBlank(dataMap['mlt'].mltId) && typeof( dataMap['mlt'].mltCol) !== "undefined" && dataMap['mlt'].mltCol !== null && !isBlank(dataMap['mlt'].mltCol)) {
+                  urlParam = urlParam + "&mlt_id=" + dataMap['mlt'].mltId + "&mlt_col=" + dataMap['mlt'].mltCol;
+              }
+            }
+
             if (typeof(page) !== "undefined" && page !== null && !isNaN(page)) {
                 urlParam = urlParam + "&page=" + page;
+            }
+
+            if(typeof(dataMap['collections']) !== "undefined" && dataMap['collections'] !== null && !isBlank(dataMap['collections'])){
+              for(colname in dataMap['collections']){
+                if(dataMap['collections'][colname]['checked'] == 'true'){
+                  urlParam = urlParam + "&cname=" + dataMap['collections'][colname]['name'];
+                }
+              }
             }
 
             if (typeof(dataMap['pageSize']) !== "undefined" && dataMap['pageSize'] !== null && !isNaN(dataMap['pageSize'])) {
@@ -196,7 +213,7 @@ angular.module('searchblox.service', [])
             }
         }
 
-        this.parseLinks = function (dataobj, facetFieldsMap) {
+        /*this.parseLinks = function (dataobj, facetFieldsMap) {
             var resultobj = new Object();
             // resultobj["npages"] = new Array();
             resultobj["pages"] = new Array();
@@ -212,7 +229,7 @@ angular.module('searchblox.service', [])
                         var linkobj = new Object();
                         linkobj['pageName'] = dataobj.links.link[item]["@page"];
                         linkobj['pageNo'] = getParam('page', dataobj.links.link[item]["@url"]);
-                        linkobj['url'] = dataobj.links.link[item]["@url"]
+                        linkobj['url'] = dataobj.links.link[item]["@url"];
                         resultobj["pages"].push(linkobj);
                         //resultobj["pages"].push(dataobj.links.link[item]);
                     }
@@ -220,7 +237,7 @@ angular.module('searchblox.service', [])
                 }
             }
             return resultobj;
-        }
+        }*/
 
         // return array of advertisements
         function getAds(adsObj){
@@ -275,6 +292,7 @@ angular.module('searchblox.service', [])
             var t = recstr.substring(recstr.lastIndexOf('.') + 1).toLowerCase();
             var isImage = false;
             var isVideo = false;
+            var parser = new DOMParser();
 
             if (recstr.startsWith('http') || recstr.startsWith('https')) {
                 if (t == "jpg" || t == "jpeg" || t == "png" || t == "gif" || t == "bmp") {
@@ -290,7 +308,7 @@ angular.module('searchblox.service', [])
                 } else if (t == "mpeg" || t == "mp4" || t == "flv" || t == "mpg") {
                     isVideo = true;
                 }
-                computedResult.contentUrl = '../servlet/FileServlet?url=' + recstr + '&col=' + colid;
+                computedResult.contentUrl = '../servlet/FileServlet?url=' + encodeURIComponent(recstr) + '&col=' + colid;
                 if (result.url.lastIndexOf('http', 0) === 0) {
                     computedResult.contentUrl = result.url;
                 }
@@ -313,6 +331,7 @@ angular.module('searchblox.service', [])
             } else {
                 computedResult.contentNature = "href";
             }
+            computedResult['description'] = parser.parseFromString(computedResult['description'], 'text/html').body.textContent; // TO DECODE THE SPECIAL CHARACTERS
             return computedResult;
         }
 
@@ -345,7 +364,13 @@ angular.module('searchblox.service', [])
             resultobj["start"] = "";
             resultobj["found"] = "0";
             resultobj["showAds"] = false;
-            if (typeof(dataobj.results) !== "undefined" && typeof(dataobj.results.result) !== "undefined") {
+            resultobj["query"] = "";
+            resultobj['collections'] = new Array();
+            resultobj["suggest"] = "";
+            if(typeof(dataobj.results['@query']) !== "undefined"){ //TO STORE THE QUERY IN RESULT OBJECT
+              resultobj["query"] = dataobj.results['@query'];
+            }
+            if (typeof(dataobj.results) !== "undefined" && typeof(dataobj.results.result) !== "undefined"){
                 for (var item in dataobj.results.result) {
                     if (item == "@no") {
                         resultobj["records"].push(computeResult(dataobj.results.result));
@@ -355,6 +380,9 @@ angular.module('searchblox.service', [])
                     resultobj["records"].push(computeResult(dataobj.results.result[item]));
                     resultobj["found"] = dataobj.results['@hits'];
                 }
+            }
+            if(resultobj["found"] <=0 ){
+              resultobj["suggest"] = dataobj.results['@suggest'];
             }
             if ( dataobj.ads !== null && typeof(dataobj.ads)!== "undefined"){
                 resultobj["ads"] = new Array();
@@ -367,8 +395,36 @@ angular.module('searchblox.service', [])
             if (typeof( dataMap['collectionForAds']) !== "undefined" && dataMap['collectionForAds'] !== null){
                 resultobj["showAds"] = showAds(dataobj.searchform.collections,dataMap['collectionForAds']);
             }
+            if(typeof(dataobj.searchform['collections']) !== "undefined" && dataobj.searchform['collections']!== null){
+              var collections = dataobj["searchform"]["collections"];
+              for(colname in collections){
+                resultobj['collections'].push({
+                  name: collections[colname]['@name'],
+                  checked: collections[colname]['@checked']
+                });
+              }
+            }
 
             if (typeof(dataobj.facets) !== "undefined") {
+              /* REORDERING FACETS */
+                var modifyFacetArray = (dataobj.facets).slice();
+                for(var i=0, len = modifyFacetArray.length; i < len; i++){
+                  if(modifyFacetArray[i]['@name'] == 'contenttype'){
+                    dataobj.facets[0] = modifyFacetArray[i];
+                  }
+                  else if(modifyFacetArray[i]['@name'] == 'keywords'){
+                    dataobj.facets[1] = modifyFacetArray[i];
+                  }
+                  else if(modifyFacetArray[i]['@name'] == 'colname'){
+                    dataobj.facets[2] = modifyFacetArray[i];
+                  }
+                  else if(modifyFacetArray[i]['@name'] == 'lastmodified'){
+                    dataobj.facets[3] = modifyFacetArray[i];
+                  }
+                  else if(modifyFacetArray[i]['@name'] == 'size'){
+                    dataobj.facets[4] = modifyFacetArray[i];
+                  }
+                }
                 if (dataobj.facets) {
                     resultobj["facets"] = new Object();
                     if (dataobj.facets.facet) {

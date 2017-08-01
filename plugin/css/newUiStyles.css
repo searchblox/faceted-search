@@ -1,0 +1,268 @@
+body{
+  background-color: #F2F2F2;
+  font-family: sans-serif;
+}
+/* COMMON STYLES FOR MOST SECTIONS */
+.border-radius-0{
+  border-radius: 0 !important;
+}
+
+.background-blue{
+  background-color: #619ED5;
+}
+
+.progress-margin-bottom{
+  margin-bottom: 0;
+}
+
+.line-height-24{
+  line-height: 24px;
+}
+
+.font-color{
+  color: #5D5D5D;
+}
+
+.margin-top-1{
+  margin-top: 1em;
+}
+
+.padding-10{
+  padding: 10px;
+}
+
+.padding-5{
+  padding: 5px;
+}
+
+.padding-0{
+  padding: 0px;
+}
+
+.margin-5{
+  margin: 5px;
+}
+
+.word-break-filter{
+  word-break: break-word;
+}
+/* HEADER SECTION */
+.header{
+  background-color: #5C5C5C;
+  padding: 1em 1em 1em 4em;
+}
+
+.header img{
+  height: 54px;
+}
+
+.iconsDiv{
+  display: flex;
+  height: 54px;
+  align-items: center;
+}
+
+.headerIcons{
+  color: white;
+  margin-left: 2em;
+}
+
+/* FACETED SEARCH TEXT */
+
+.faceted-search-text > h3{
+  font-weight: bold;
+}
+
+.settings-image{
+  background-color: white;
+  border-left: 0;
+  padding: 0 !important;
+}
+
+/* CHECKBOXES STYLES */
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  position: relative;
+  padding-left: 1.95em;
+  cursor: pointer;
+}
+
+/* checkbox aspect */
+.checkboxDiv{
+  text-align: center;
+  padding-top: 1em;
+}
+
+[type="checkbox"]:not(:checked) + label:before, [type="checkbox"]:checked + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.25em;
+  height: 1.25em;
+  border: 1px solid grey;
+  background: #fff;
+}
+/* checked mark aspect */
+[type="checkbox"]:not(:checked) + label:after, [type="checkbox"]:checked + label:after {
+  content: '✔';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 1.3em;
+  line-height: 0.8;
+  color: #619ED5;
+  transition: all .2s;
+}
+/* checked mark aspect changes */
+[type="checkbox"]:not(:checked) + label:after {
+  opacity: 0;
+  transform: scale(0);
+}
+
+[type="checkbox"]:checked + label:after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* hover style just for information */
+label:hover:before {
+  border: 1px solid black !important;
+}
+
+/* INPUT FIELD GROUP */
+.settings-image > span{
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, 0.3);
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.input-search{
+  border-right: 0 !important;
+  box-shadow: none !important;
+}
+
+.input-search:focus{
+  box-shadow: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  border-right: none !important;
+}
+
+.settings-dropdown{
+  left: initial;
+  right: 0;
+}
+
+.settings-dropdown li{
+  padding: 2px 0;
+  font-size: 12px;
+}
+
+.settings-dropdown li>a{
+  background-color: none;
+}
+
+.settings-dropdown li>a:hover{
+  background-color: #3276b1;
+  color: white;
+}
+
+/* LEFT PANE FILTERS */
+.results-found{
+  font-size: 12px !important;
+}
+
+.filter-selected{
+  display: inline-block
+  vertical-align: middle;
+  color: #609ed4;
+  font-size: 12px;
+  line-height: 10px;
+  font-weight: 400;
+  background-color: #daeffa;
+  border: 1px solid #609ed4;
+  border-radius: 3px;
+  -webkit-transition: all .25s ease;
+  transition: all .25s ease;
+  text-decoration: none;
+  padding: 8px 10px 8px 10px;
+  margin: 5px;
+  white-space: normal;
+  word-break: break-word;
+  max-width: 120px;
+}
+
+.filter-options:hover{
+  cursor: pointer;
+  color: blue;
+}
+
+.filter-type{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.filter-type:hover{
+  cursor: pointer;
+}
+
+.chevron-down-icon{
+/*  margin-right: 4em;*/
+  cursor: pointer;
+}
+
+.showUptoColFilterCount:hover{
+  cursor: pointer;
+}
+
+.showUptoColFilterCount{
+  position: absolute;
+  z-index: 1000;
+  padding: 5px 0;
+  background-color: white;
+  box-shadow: 0 0 1px black;
+}
+
+.showUptoColFilterCount>div{
+  padding: 5px;
+  background-color: #E1DFDF;
+  text-align: center;
+}
+
+/* SORT OPTIONS */
+.sort-align{
+  margin-top: 2em;
+}
+
+.sort-align a{
+  margin-left: 1em;
+}
+
+/* SEARCH RESULTS */
+.search-results-for, .filter-by{
+  font-size: 18px;
+  background-color: #F2F2F2;
+  font-weight: bold;
+  padding: 15px 20px 15px 20px;
+  color: #5D5D5D;
+}
+
+.search-result-container{
+  padding: 12px;
+}
+
+/*TITLE OF SEARCH RESULT IN ANCHOR TAG*/
+.search-result-title{
+  color: #5D5D5D;
+  font-size: 16px;
+}
+
+.search-result-title:hover{
+  color: #5D5D5D;
+  text-decoration: none;
+}
+
+.url-bottom{
+  color: #609ed4;
+}

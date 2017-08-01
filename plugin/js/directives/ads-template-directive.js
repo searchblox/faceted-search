@@ -32,7 +32,8 @@ angular.module('searchblox.adsItem', []).
         return {
             restrict: 'E',
             scope: {
-                adv: '='
+                adv: '=',
+                removeAds: '='
             },
             link: linker,
             controller: function ($scope) {

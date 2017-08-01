@@ -1,45 +1,30 @@
-<!-- <div class="row-fluid">
-    <a href="{{url}}" target="_blank"><b>{{content.title}}</b></a>
-</div>
-
-<div class="row-fluid" style="height:100px;">
-    <a href="{{url}}" target="_blank">
-        <img class="thumbnail" style="float:left; width:100px; margin:0 5px 10px 0; max-height:150px;"
-             ng-src="{{url}}">
-    </a>
-</div>
-
-<div class="row-fluid">
-    <div ng-switch on="content.context">
-        <div ng-switch-when="undefined" ng-show="content.description">
-            {{content.description}}
-        </div>
-        <div ng-switch-default>
-             <span ng-repeat="text in formatData(content.context['text']) track by $index">
-                   ...{{text}} <b>{{formatData(content.context.highlight)[$index]}}</b>
-             </span>
-        </div>
-    </div>
-</div>
-
-<div class="row-fluid">
-    <i>
-        {{getLastModified(content.lastmodified)}}
-    </i>
-</div>
-
--------------------------------------------------->
 <div class="col-sm-12 search-result-container">
   <div class="col-sm-12 col-md-10">
     <div class="row">
       <div class="row-fluid line-height-24">
           <a href="{{url}}" target="_blank" class="search-result-title"><b>{{content.title}}</b></a>
+          <a href="javascript:void(0)" ng-click="doMltSearch({mltId: content.uid, mltCol: content.col, page: '1'})" ng-if="mltShow({uid: content.uid, url: content.url, type: content.contenttype})"> More Like This</a>
       </div>
-      
-      <div class="row-fluid" style="height:100px;">
+
+      <!-- TO DISPLAY VIDEOS FOR VIDEO RESULTS -->
+      <div class="row-fluid" ng-if="content.contentNature == 'video'">
+          <img ng-src="images/play.jpg" height="150px" width="150px" ng-hide="playVideo" ng-click="playVideo = !playVideo"/> <br>
+          <video thumbid="_video" width="320" height="240" controls ng-show="playVideo">
+            <source src="{{url}}" type="video/mp4"></source>
+          </video>
+      </div>
+
+      <!-- TO DISPLAY IMAGES FOR IMAGE RESULTS -->
+      <div class="row-fluid" ng-if="content.contentNature == 'image'">
           <a href="{{url}}" target="_blank">
-              <img class="thumbnail" style="float:left; width:100px; margin:0 5px 10px 0; max-height:150px;"
-                   ng-src="{{url}}">
+              <img class="thumbnail" style="width:150px; max-height:150px;" ng-src="{{url}}">
+          </a>
+      </div>
+
+      <!-- TO DISPLAY IMAGES FOR TWITTER RESULTS -->
+      <div class="row-fluid" ng-if="content.contenttype == 'tweet'">
+          <a href="{{content._autocomplete}}" target="_blank">
+              <img class="thumbnail" style="width:100px; max-height:150px;" ng-src="{{content._autocomplete}}">
           </a>
       </div>
 
@@ -58,7 +43,7 @@
       </div>
 
       <div class="row-fluid line-height-24">
-          <a href="{{content.url}}">{{content.url}}</a>
+          <spanc class="url-bottom">{{content.url}}</span>
       </div>
     </div>
   </div>
@@ -73,7 +58,7 @@
       </div>
       <div class="pull-right">
         <span class="pull-right">{{getLastModified(content.lastmodified)}}</span><br>
-        <span class="pull-right">{{content.size}}</span>
+        <span class="pull-right">{{sizeFormat(content.size)}}</span>
       </div>
 
 
