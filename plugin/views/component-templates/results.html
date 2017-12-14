@@ -31,13 +31,15 @@
       <div class="row-fluid">
           <div ng-switch on="content.context" class="line-height-24">
               <div ng-switch-when="undefined" ng-show="content.description">
-                  <span>... </span>{{content.description}}
+                  <span>... </span>
+                  <span ng-bind-html="content.description"></span>
               </div>
               <div ng-switch-default>
-                  <span>... </span>
-                   <span ng-repeat="text in formatData(content.context['text']) track by $index">
+                <span>... </span>
+                <span ng-bind-html="content.context.text"></span>
+                   <!-- <span ng-repeat="text in formatData(content.context['text']) track by $index">
                        {{text}} <b>{{formatData(content.context.highlight)[$index]}}</b>
-                   </span>
+                   </span> -->
               </div>
           </div>
       </div>
