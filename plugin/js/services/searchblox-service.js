@@ -331,6 +331,12 @@ angular.module('searchblox.service', [])
             } else {
                 computedResult.contentNature = "href";
             }
+
+            if(computedResult.context){
+              if(computedResult.context['text'] !== undefined && computedResult.context['highlight'] === undefined){
+                computedResult.context['text'] = computedResult.context['text'].replace(/highlight>/g, "b>");
+              }
+            }
             computedResult['description'] = parser.parseFromString(computedResult['description'], 'text/html').body.textContent; // TO DECODE THE SPECIAL CHARACTERS
             return computedResult;
         }
